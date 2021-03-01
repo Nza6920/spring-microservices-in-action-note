@@ -1,0 +1,14 @@
+server:
+  port: 7017
+spring:
+  profiles:
+    # 使用文件系统存储配置信息
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          # 指定配置文件位置
+          search-locations:
+            - classpath:/config/licensingservice
+            - classpath:/config/organizationservice

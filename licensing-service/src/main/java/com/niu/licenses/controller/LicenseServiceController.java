@@ -24,7 +24,7 @@ public class LicenseServiceController {
      * @param organizationId 组织ID
      * @return {@link License}
      */
-    @GetMapping("/licenses/{licensesId}")
+    @GetMapping("/{licensesId}")
     public License getLicenses(@PathVariable String licensesId, @PathVariable String organizationId) {
         return new License()
                 .setId(licensesId)

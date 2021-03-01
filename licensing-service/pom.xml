@@ -5,12 +5,21 @@
     <parent>
         <artifactId>spring-microservices-in-action-note</artifactId>
         <groupId>com.niu.spring</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>licensing-service</artifactId>
     <description>许可证服务</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <start-class>com.niu.spring.Application</start-class>
+        <docker.image.name>niu/licensing-service</docker.image.name>
+        <docker.image.tag>licensing-service</docker.image.tag>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -20,10 +29,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 </project>
