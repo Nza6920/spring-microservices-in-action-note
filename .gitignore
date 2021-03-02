@@ -34,3 +34,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# 不提交
+licensingservice.yml
+licensingservice-dev.yml
+licensingservice-prod.yml
