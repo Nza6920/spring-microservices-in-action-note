@@ -11,6 +11,8 @@
     <modules>
         <module>licensing-service</module>
         <module>conf-service</module>
+        <module>eureka-service</module>
+        <module>organization-service</module>
     </modules>
 
     <properties>

@@ -1,14 +1,13 @@
-package com.niu.licenses.service;
+package com.niu.organization.service;
 
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
-import com.niu.licenses.model.Organization;
-import com.niu.licenses.repository.OrganizationRepository;
+import com.niu.organization.model.Organization;
+import com.niu.organization.repository.OrganizationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 /**
  * 机构业务类
@@ -27,7 +26,7 @@ public class OrganizationService {
      * 保存机构
      *
      * @param organization 机构实体
-     * @return {@link java.lang.String} 新增的机构ID
+     * @return {@link String} 新增的机构ID
      * @author nza
      * @createTime 2021/3/3 9:43
      */
@@ -40,11 +39,23 @@ public class OrganizationService {
     }
 
     /**
+     * 根据ID获取机构
+     *
+     * @param id 机构ID
+     * @return {@link com.niu.organization.model.Organization}
+     * @createTime 2021/3/3 17:20
+     */
+    public Organization findById(String id) {
+        Optional<Organization> organization = organizationRepository.findById(id);
+        return organization.orElse(null);
+    }
+
+    /**
      * 查询所有机构
      *
+     * @return {@link List<com.niu.organization.model.Organization>} 机构列表
      * @author nza
      * @createTime 2021/3/3 9:45
-     * @return    {@link java.util.List<com.niu.licenses.model.Organization>} 机构列表
      */
     public List<Organization> findAllOrganization() {
         return (List<Organization>) organizationRepository.findAll();

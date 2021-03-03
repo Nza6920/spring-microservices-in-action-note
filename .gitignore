@@ -39,3 +39,10 @@ build/
 licensingservice.yml
 licensingservice-dev.yml
 licensingservice-prod.yml
+
+# 不提交
+organizationservice.yml
+organizationservice-dev.yml
+organizationservice-prod.yml
+
+/conf-service/src/main/resources/application.yml

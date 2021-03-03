@@ -1,4 +1,4 @@
-example.property: "我是开发配置"
+example.property: "我是许可证开发配置"
 spring.jpa.database: "POSTGRESQL"
 spring.datasource.platform:  "postgres"
 spring.jpa.show-sql: "false"

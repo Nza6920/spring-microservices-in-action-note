@@ -1,6 +1,6 @@
-package com.niu.licenses.repository;
+package com.niu.organization.repository;
 
-import com.niu.licenses.model.Organization;
+import com.niu.organization.model.Organization;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,0 +1,25 @@
+server:
+  port: 7017
+spring:
+  profiles:
+    # 使用文件系统存储配置信息
+    active: native
+  cloud:
+    config:
+       server:
+        bootstrap: true
+        encrypt:
+            enabled: false
+       git:
+        # 配置 Git服务器 和 Git存储库 的URL
+        uri: https://github.com/Nza6920/spring-microservice-in-action-note-conf
+        # 配置在 Git 中查找配置文件的路径
+        searchPaths: licensingservice,organizationservice
+        username:
+        password:
+        # 使用文件系统
+        #native:
+        # 指定配置文件位置
+        #search-locations:
+        #- classpath:/config/licensingservice
+        #- classpath:/config/organizationservice

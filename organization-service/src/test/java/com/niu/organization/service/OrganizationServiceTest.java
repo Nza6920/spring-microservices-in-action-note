@@ -1,8 +1,8 @@
-package com.niu.licenses.service;
+package com.niu.organization.service;
 
 import cn.hutool.core.util.RandomUtil;
-import com.niu.licenses.BaseTest;
-import com.niu.licenses.model.Organization;
+import com.niu.organization.BaseTest;
+import com.niu.organization.model.Organization;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

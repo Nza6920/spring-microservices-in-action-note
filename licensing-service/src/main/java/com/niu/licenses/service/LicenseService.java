@@ -3,6 +3,7 @@ package com.niu.licenses.service;
 import cn.hutool.core.util.IdUtil;
 import com.niu.licenses.config.ServiceConfig;
 import com.niu.licenses.model.License;
+import com.niu.licenses.model.Organization;
 import com.niu.licenses.repository.LicenseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,18 +25,43 @@ public class LicenseService {
 
     private final ServiceConfig serviceConfig;
 
+//    private Organization retrieveOrgInfo(String organizationId, String clientType){
+//        Organization organization = null;
+
+//        switch (clientType) {
+//            case "feign":
+//                System.out.println("I am using the feign client");
+//                organization = organizationFeignClient.getOrganization(organizationId);
+//                break;
+//            case "rest":
+//                System.out.println("I am using the rest client");
+//                organization = organizationRestClient.getOrganization(organizationId);
+//                break;
+//            case "discovery":
+//                System.out.println("I am using the discovery client");
+//                organization = organizationDiscoveryClient.getOrganization(organizationId);
+//                break;
+//            default:
+//                organization = organizationRestClient.getOrganization(organizationId);
+//        }
+//        return organization;
+//    }
+
+
     /**
      * 获取许可
      *
      * @param organizationId 机构ID
      * @param licenseId      许可ID
+     * @param clientType     客户端类型
      * @return {@link com.niu.licenses.model.License}
      * @author nza
      * @createTime 2021/3/2 21:48
      */
-    public License getLicense(String organizationId, String licenseId) {
+    public License getLicense(String organizationId, String licenseId, String clientType) {
 
         License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
+
 
         return license.setComment(serviceConfig.getExampleProperty());
     }

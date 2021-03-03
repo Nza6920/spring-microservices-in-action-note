@@ -32,9 +32,11 @@ public class LicenseServiceController {
      * @param organizationId 组织ID
      * @return {@link License}
      */
-    @GetMapping("/{licensesId}")
-    public ServerResponse<License> getLicenses(@PathVariable String licensesId, @PathVariable String organizationId) {
-        return ServerResponse.createBySuccess(licenseService.getLicense(organizationId, licensesId));
+    @GetMapping("/{licensesId}/{clientType}")
+    public ServerResponse<License> getLicenses(@PathVariable String licensesId,
+                                               @PathVariable String organizationId,
+                                               @PathVariable String clientType) {
+        return ServerResponse.createBySuccess(licenseService.getLicense(organizationId, licensesId, clientType));
     }
 
     /**

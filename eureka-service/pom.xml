@@ -9,27 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.niu.spring.conf</groupId>
-    <artifactId>conf-service</artifactId>
-    <version>1.0.0</version>
-    <description>配置管理服务</description>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <start-class>com.niu.spring.conf.Application</start-class>
         <java.version>1.8</java.version>
-        <docker.image.name>niu/conf-service</docker.image.name>
-        <docker.image.tag>conf-service</docker.image.tag>
     </properties>
+
+    <artifactId>eureka-service</artifactId>
+    <description>eureka 注册中心服务</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
     </dependencies>
 
