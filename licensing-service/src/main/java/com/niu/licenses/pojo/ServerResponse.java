@@ -31,6 +31,10 @@ public class ServerResponse<T> implements Serializable {
      */
     private T data;
 
+    public ServerResponse() {
+        this(ResponseCode.SUCCESS.getCode());
+    }
+
     private ServerResponse(int status) {
         this.status = status;
     }

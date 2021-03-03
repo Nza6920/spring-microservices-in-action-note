@@ -1,6 +1,6 @@
 package com.niu.licenses.client;
 
-import com.niu.licenses.model.Organization;
+import com.niu.licenses.pojo.ServerResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
@@ -30,11 +30,11 @@ public class OrganizationDiscoveryClient {
      * 获取组织服务
      *
      * @param organizationId 组织ID
+     * @return {@link com.niu.licenses.model.Organization}
      * @author nza
      * @createTime 2021/3/3 17:50
-     * @return    {@link com.niu.licenses.model.Organization}
      */
-    public Organization getOrganization(String organizationId) {
+    public Object getOrganization(String organizationId) {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -50,8 +50,10 @@ public class OrganizationDiscoveryClient {
         log.info("SERVICE URI: {}", serviceUri);
 
         // 使用标准的 Spring Rest 模板类去调用服务
-        ResponseEntity<Organization> restExchange = restTemplate.exchange(serviceUri, HttpMethod.GET, null, Organization.class, organizationId);
+        ResponseEntity<ServerResponse> restExchange = restTemplate.exchange(serviceUri, HttpMethod.GET, null,
+                ServerResponse.class, organizationId);
 
-        return restExchange.getBody();
+        ServerResponse body = restExchange.getBody();
+        return (body == null || !body.isSuccess()) ? null : body.getData();
     }
 }

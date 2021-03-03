@@ -1,11 +1,16 @@
 package com.niu.licenses.service;
 
 import cn.hutool.core.util.IdUtil;
+import com.niu.licenses.client.OrganizationDiscoveryClient;
+import com.niu.licenses.client.OrganizationFeignClient;
+import com.niu.licenses.client.OrganizationRestTemplateClient;
 import com.niu.licenses.config.ServiceConfig;
+import com.niu.licenses.constant.ClientType;
 import com.niu.licenses.model.License;
-import com.niu.licenses.model.Organization;
+import com.niu.licenses.pojo.ServerResponse;
 import com.niu.licenses.repository.LicenseRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,33 +24,41 @@ import java.util.List;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class LicenseService {
 
     private final LicenseRepository licenseRepository;
 
     private final ServiceConfig serviceConfig;
 
-//    private Organization retrieveOrgInfo(String organizationId, String clientType){
-//        Organization organization = null;
+    private final OrganizationFeignClient organizationFeignClient;
 
-//        switch (clientType) {
-//            case "feign":
-//                System.out.println("I am using the feign client");
-//                organization = organizationFeignClient.getOrganization(organizationId);
-//                break;
-//            case "rest":
-//                System.out.println("I am using the rest client");
-//                organization = organizationRestClient.getOrganization(organizationId);
-//                break;
-//            case "discovery":
-//                System.out.println("I am using the discovery client");
-//                organization = organizationDiscoveryClient.getOrganization(organizationId);
-//                break;
-//            default:
-//                organization = organizationRestClient.getOrganization(organizationId);
-//        }
-//        return organization;
-//    }
+    private final OrganizationRestTemplateClient organizationRestClient;
+
+    private final OrganizationDiscoveryClient organizationDiscoveryClient;
+
+    private Object retrieveOrgInfo(String organizationId, String clientType) {
+
+        Object organization = null;
+
+        if (ClientType.FEIGN.equals(clientType)) {
+            log.info("I am using the feign client");
+            ServerResponse serverResponse = organizationFeignClient.getOrganization(organizationId);
+            if (serverResponse != null && serverResponse.isSuccess()) {
+                organization = serverResponse.getData();
+            }
+        } else if (ClientType.REST.equals(clientType)) {
+            log.info("I am using the rest client");
+            organization = organizationRestClient.getOrganization(organizationId);
+        } else if (ClientType.DISCOVERY.equals(clientType)) {
+            log.info("I am using the discovery client");
+            organization = organizationDiscoveryClient.getOrganization(organizationId);
+        } else {
+            organization = organizationRestClient.getOrganization(organizationId);
+        }
+
+        return organization;
+    }
 
 
     /**
@@ -62,8 +75,9 @@ public class LicenseService {
 
         License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
+        Object org = retrieveOrgInfo(organizationId, clientType);
 
-        return license.setComment(serviceConfig.getExampleProperty());
+        return license.setOrganization(org);
     }
 
     /**
@@ -86,7 +100,8 @@ public class LicenseService {
      * @createTime 2021/3/2 21:53
      */
     public void saveLicense(License license) {
-        license.setId(IdUtil.simpleUUID());
+        license.setId(IdUtil.simpleUUID())
+                .setComment(serviceConfig.getExampleProperty());
         licenseRepository.save(license);
     }
 

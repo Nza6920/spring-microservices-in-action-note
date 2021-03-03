@@ -4,10 +4,7 @@ package com.niu.licenses.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 许可证
@@ -62,4 +59,10 @@ public class License {
      */
     @Column(name = "comment")
     private String comment;
+
+    /**
+     * 机构
+     */
+    @Transient
+    private Object organization;
 }
