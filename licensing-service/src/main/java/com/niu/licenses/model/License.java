@@ -17,20 +17,20 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Entity
-@Table(name = "licenses")
+@Table(name = "license")
 public class License {
 
     /**
      * ID
      */
     @Id
-    @Column(name = "license_id", nullable = false)
+    @Column(name = "id", nullable = false)
     private String id;
 
     /**
      * 组织ID
      */
-    @Column(name = "organization_id", nullable = false)
+    @Column(name = "organization_id")
     private String organizationId;
 
     /**

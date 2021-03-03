@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * <功能简述>
+ * 许可证数据库操作对象
  *
  * @author [nza]
  * @version 1.0 [2021/03/02 21:35]
@@ -35,5 +35,5 @@ public interface LicenseRepository extends CrudRepository<License, String> {
      * @createTime 2021/3/2 21:41
      * @return    {@link com.niu.licenses.model.License}
      */
-    License findByOrganizationIdAndLicenseId(String organizationId, String licenseId);
+    License findByOrganizationIdAndId(String organizationId, String licenseId);
 }

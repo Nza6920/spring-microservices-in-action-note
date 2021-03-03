@@ -1,5 +1,6 @@
 package com.niu.licenses.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.niu.licenses.config.ServiceConfig;
 import com.niu.licenses.model.License;
 import com.niu.licenses.repository.LicenseRepository;
@@ -7,7 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 许可证业务类
@@ -35,7 +35,7 @@ public class LicenseService {
      */
     public License getLicense(String organizationId, String licenseId) {
 
-        License license = licenseRepository.findByOrganizationIdAndLicenseId(organizationId, licenseId);
+        License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
         return license.setComment(serviceConfig.getExampleProperty());
     }
@@ -60,7 +60,7 @@ public class LicenseService {
      * @createTime 2021/3/2 21:53
      */
     public void saveLicense(License license) {
-        license.setId(UUID.randomUUID().toString());
+        license.setId(IdUtil.simpleUUID());
         licenseRepository.save(license);
     }
 
@@ -78,7 +78,7 @@ public class LicenseService {
     /**
      * 删除许可
      *
-     * @param licese 许可实体
+     * @param license 许可实体
      * @author nza
      * @createTime 2021/3/2 21:52
      */
