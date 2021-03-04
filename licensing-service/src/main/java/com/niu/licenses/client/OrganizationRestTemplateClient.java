@@ -20,11 +20,36 @@ public class OrganizationRestTemplateClient {
 
     private final RestTemplate restTemplate;
 
+    /**
+     * 获取机构
+     *
+     * @param organizationId 机构ID
+     * @return {@link java.lang.Object} 机构
+     * @author nza
+     * @createTime 2021/3/4 15:57
+     */
     public Object getOrganization(String organizationId) {
 
         // 使用服务名称传递
         String uri = "http://organizationservice/v1/organizations/{organizationId}";
         ResponseEntity<ServerResponse> restExchange = restTemplate.exchange(uri, HttpMethod.GET, null, ServerResponse.class, organizationId);
+
+        ServerResponse body = restExchange.getBody();
+        return (body == null || !body.isSuccess()) ? null : body.getData();
+    }
+
+    /**
+     * 获取机构列表
+     *
+     * @return {@link java.lang.Object} 机构
+     * @author nza
+     * @createTime 2021/3/4 15:57
+     */
+    public Object findAllOrganization() {
+
+        // 使用服务名称传递
+        String uri = "http://organizationservice/v1/organizations";
+        ResponseEntity<ServerResponse> restExchange = restTemplate.exchange(uri, HttpMethod.GET, null, ServerResponse.class);
 
         ServerResponse body = restExchange.getBody();
         return (body == null || !body.isSuccess()) ? null : body.getData();

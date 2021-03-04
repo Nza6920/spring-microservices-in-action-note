@@ -25,5 +25,16 @@ public interface OrganizationFeignClient {
      * @return    {@link com.niu.licenses.model.Organization} 机构
      */
     @GetMapping(value = "/v1/organizations/{organizationId}", consumes = "application/json")
-    ServerResponse getOrganization(@PathVariable("organizationId") String organizationId);
+    ServerResponse<Object> getOrganization(@PathVariable("organizationId") String organizationId);
+
+
+    /**
+     * 获取机构列表
+     *
+     * @author nza
+     * @createTime 2021/3/3 21:33
+     * @return    {@link com.niu.licenses.model.Organization} 机构
+     */
+    @GetMapping(value = "/v1/organizations")
+    ServerResponse<Object> findAllOrganization();
 }

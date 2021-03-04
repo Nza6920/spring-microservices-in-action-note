@@ -6,6 +6,8 @@ import com.niu.organization.service.OrganizationService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 机构控制器
  *
@@ -24,11 +26,11 @@ public class OrganizationServiceController {
      * 根据ID获取机构
      *
      * @param organizationId 机构ID
+     * @return {@link com.niu.organization.pojo.ServerResponse<com.niu.organization.model.Organization>}
      * @author nza
      * @createTime 2021/3/3 17:21
-     * @return    {@link com.niu.organization.pojo.ServerResponse<com.niu.organization.model.Organization>}
      */
-    @RequestMapping(value = "/{organizationId}", method = RequestMethod.GET)
+    @GetMapping("/{organizationId}")
     public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId) {
         return ServerResponse.createBySuccess(organizationService.findById(organizationId));
     }
@@ -37,13 +39,25 @@ public class OrganizationServiceController {
      * 新增机构
      *
      * @param org 机构实体
+     * @return {@link com.niu.organization.pojo.ServerResponse<com.niu.organization.model.Organization>}
      * @author nza
      * @createTime 2021/3/3 17:21
-     * @return    {@link com.niu.organization.pojo.ServerResponse<com.niu.organization.model.Organization>}
      */
     @PostMapping()
     public ServerResponse<Object> saveOrganization(@RequestBody Organization org) {
         organizationService.saveOrganization(org);
         return ServerResponse.createBySuccess();
+    }
+
+    /**
+     * 新增机构
+     *
+     * @return {@link com.niu.organization.pojo.ServerResponse<com.niu.organization.model.Organization>}
+     * @author nza
+     * @createTime 2021/3/3 17:21
+     */
+    @GetMapping()
+    public ServerResponse<List<Organization>> findAllOrganization() {
+        return ServerResponse.createBySuccess(organizationService.findAllOrganization());
     }
 }

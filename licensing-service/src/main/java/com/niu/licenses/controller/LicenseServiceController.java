@@ -47,8 +47,9 @@ public class LicenseServiceController {
      * @author nza
      * @createTime 2021/3/2 21:56
      */
-    @GetMapping()
-    public ServerResponse<List<License>> getLicenses(@PathVariable("organizationId") String organizationId) {
-        return ServerResponse.createBySuccess(licenseService.getLicensesByOrg(organizationId));
+    @GetMapping("/{clientType}")
+    public ServerResponse<List<License>> getLicenses(@PathVariable String organizationId,
+                                                     @PathVariable String clientType) {
+        return ServerResponse.createBySuccess(licenseService.getLicensesByOrg(organizationId, clientType));
     }
 }

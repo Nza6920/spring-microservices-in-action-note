@@ -27,7 +27,8 @@ public class OrganizationDiscoveryClient {
     private final DiscoveryClient discoveryClient;
 
     /**
-     * 获取组织服务
+     * 获取机构
+     * todo: 不推荐此种方式, 无法充分的利用ribbon本地缓存表
      *
      * @param organizationId 组织ID
      * @return {@link com.niu.licenses.model.Organization}
@@ -52,6 +53,37 @@ public class OrganizationDiscoveryClient {
         // 使用标准的 Spring Rest 模板类去调用服务
         ResponseEntity<ServerResponse> restExchange = restTemplate.exchange(serviceUri, HttpMethod.GET, null,
                 ServerResponse.class, organizationId);
+
+        ServerResponse body = restExchange.getBody();
+        return (body == null || !body.isSuccess()) ? null : body.getData();
+    }
+
+    /**
+     * 获取机构列表
+     * todo: 不推荐此种方式, 无法充分的利用ribbon本地缓存表
+     *
+     * @return {@link com.niu.licenses.model.Organization}
+     * @author nza
+     * @createTime 2021/3/3 17:50
+     */
+    public Object findAllOrganization() {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 获取组织服务所有的实例列表
+        List<ServiceInstance> instances = discoveryClient.getInstances("organizationservice");
+
+        if (instances.size() == 0) {
+            return null;
+        }
+
+        // 检索要调用的服务列表
+        String serviceUri = String.format("%s/v1/organizations", instances.get(0).getUri().toString());
+        log.info("SERVICE URI: {}", serviceUri);
+
+        // 使用标准的 Spring Rest 模板类去调用服务
+        ResponseEntity<ServerResponse> restExchange = restTemplate.exchange(serviceUri, HttpMethod.GET, null,
+                ServerResponse.class);
 
         ServerResponse body = restExchange.getBody();
         return (body == null || !body.isSuccess()) ? null : body.getData();

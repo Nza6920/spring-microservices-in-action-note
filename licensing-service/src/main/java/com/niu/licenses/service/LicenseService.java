@@ -84,12 +84,23 @@ public class LicenseService {
      * 查询组织下的许可
      *
      * @param organizationId 组织ID
+     * @param clientType     客户端类型
      * @return {@link java.util.List<com.niu.licenses.model.License>}
      * @author nza
      * @createTime 2021/3/2 21:50
      */
-    public List<License> getLicensesByOrg(String organizationId) {
-        return licenseRepository.findByOrganizationId(organizationId);
+    public List<License> getLicensesByOrg(String organizationId, String clientType) {
+
+        List<License> licenses = licenseRepository.findByOrganizationId(organizationId);
+
+        if (licenses != null && !licenses.isEmpty()) {
+            Object org = retrieveOrgInfo(organizationId, clientType);
+            for (License license : licenses) {
+                license.setOrganization(org);
+            }
+        }
+
+        return licenses;
     }
 
     /**
