@@ -1,6 +1,7 @@
 server:
   port: 7016
 
+
 eureka:
   instance:
     # 注册服务的 IP 而不是名称

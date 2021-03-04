@@ -1,6 +1,8 @@
 package com.niu.licenses.service;
 
 import cn.hutool.core.util.IdUtil;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.niu.licenses.client.OrganizationDiscoveryClient;
 import com.niu.licenses.client.OrganizationFeignClient;
 import com.niu.licenses.client.OrganizationRestTemplateClient;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * 许可证业务类
@@ -71,6 +74,9 @@ public class LicenseService {
      * @author nza
      * @createTime 2021/3/2 21:48
      */
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000")
+    })
     public License getLicense(String organizationId, String licenseId, String clientType) {
 
         License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
@@ -82,6 +88,9 @@ public class LicenseService {
 
     /**
      * 查询组织下的许可
+     * <p>
+     * @HystrixCommand 开启 hystrix 熔断器
+     * <p/>
      *
      * @param organizationId 组织ID
      * @param clientType     客户端类型
@@ -89,7 +98,13 @@ public class LicenseService {
      * @author nza
      * @createTime 2021/3/2 21:50
      */
+    @HystrixCommand(commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000")
+    })
     public List<License> getLicensesByOrg(String organizationId, String clientType) {
+
+        // 随机睡眠
+        randomlyRunLong();
 
         List<License> licenses = licenseRepository.findByOrganizationId(organizationId);
 
@@ -101,6 +116,37 @@ public class LicenseService {
         }
 
         return licenses;
+    }
+
+    /**
+     * 随机睡眠
+     *
+     * @author nza
+     * @createTime 2021/3/4 22:03
+     */
+    private void randomlyRunLong() {
+        Random random = new Random();
+
+        int randomNum = random.nextInt(3) + 1;
+
+        if (randomNum == 3) {
+            log.info("开始睡眠: {}s", random);
+            sleep();
+        }
+    }
+
+    /**
+     * 睡眠 11s
+     *
+     * @author nza
+     * @createTime 2021/3/4 22:02
+     */
+    private void sleep() {
+        try {
+            Thread.sleep(11000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
