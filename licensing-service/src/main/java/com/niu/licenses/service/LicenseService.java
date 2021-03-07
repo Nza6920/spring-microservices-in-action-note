@@ -11,6 +11,7 @@ import com.niu.licenses.constant.ClientType;
 import com.niu.licenses.model.License;
 import com.niu.licenses.pojo.ServerResponse;
 import com.niu.licenses.repository.LicenseRepository;
+import com.niu.licenses.utils.UserContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,16 +46,16 @@ public class LicenseService {
         Object organization = null;
 
         if (ClientType.FEIGN.equals(clientType)) {
-            log.info("I am using the feign client");
+            log.debug("I am using the feign client");
             ServerResponse serverResponse = organizationFeignClient.getOrganization(organizationId);
             if (serverResponse != null && serverResponse.isSuccess()) {
                 organization = serverResponse.getData();
             }
         } else if (ClientType.REST.equals(clientType)) {
-            log.info("I am using the rest client");
+            log.debug("I am using the rest client");
             organization = organizationRestClient.getOrganization(organizationId);
         } else if (ClientType.DISCOVERY.equals(clientType)) {
-            log.info("I am using the discovery client");
+            log.debug("I am using the discovery client");
             organization = organizationDiscoveryClient.getOrganization(organizationId);
         } else {
             organization = organizationRestClient.getOrganization(organizationId);
@@ -63,9 +64,11 @@ public class LicenseService {
         return organization;
     }
 
-
     /**
      * 获取许可
+     * <p>
+     * {@link https://github.com/Netflix/Hystrix/wiki/Configuration#circuitBreaker.requestVolumeThreshold}
+     * </p>
      *
      * @param organizationId 机构ID
      * @param licenseId      许可ID
@@ -75,47 +78,76 @@ public class LicenseService {
      * @createTime 2021/3/2 21:48
      */
     @HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000")
-    })
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "75"),
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "7000"),
+            @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "15000"),
+            @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "5")
+    },
+            threadPoolKey = "license",
+            threadPoolProperties = {
+                    @HystrixProperty(name = "coreSize", value = "30"),
+                    @HystrixProperty(name = "maxQueueSize", value = "10")
+            })
     public License getLicense(String organizationId, String licenseId, String clientType) {
 
-        License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
+        try {
+            log.debug("Service[获取许可] Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
 
-        Object org = retrieveOrgInfo(organizationId, clientType);
+            License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
-        return license.setOrganization(org);
+            Object org = retrieveOrgInfo(organizationId, clientType);
+
+            return license.setOrganization(org);
+        } finally {
+            log.debug("删除 Hystrix 线程本地变量...");
+            UserContextHolder.remove();
+        }
     }
 
     /**
      * 查询组织下的许可
      * <p>
-     * @HystrixCommand 开启 hystrix 熔断器
-     * <p/>
      *
      * @param organizationId 组织ID
      * @param clientType     客户端类型
      * @return {@link java.util.List<com.niu.licenses.model.License>}
+     * @HystrixCommand 开启 hystrix 熔断器
+     * <p/>
      * @author nza
      * @createTime 2021/3/2 21:50
      */
     @HystrixCommand(commandProperties = {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000")
-    })
+    },
+            threadPoolKey = "licensesByOrg",
+            threadPoolProperties = {
+                    @HystrixProperty(name = "coreSize", value = "30"),
+                    @HystrixProperty(name = "maxQueueSize", value = "10")
+            })
     public List<License> getLicensesByOrg(String organizationId, String clientType) {
 
-        // 随机睡眠
-        randomlyRunLong();
+        try {
+            log.debug("Service[查询组织下的许可] Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
 
-        List<License> licenses = licenseRepository.findByOrganizationId(organizationId);
+            // 随机睡眠
+            randomlyRunLong();
 
-        if (licenses != null && !licenses.isEmpty()) {
-            Object org = retrieveOrgInfo(organizationId, clientType);
-            for (License license : licenses) {
-                license.setOrganization(org);
+            List<License> licenses = licenseRepository.findByOrganizationId(organizationId);
+
+            if (licenses != null && !licenses.isEmpty()) {
+                Object org = retrieveOrgInfo(organizationId, clientType);
+                for (License license : licenses) {
+                    license.setOrganization(org);
+                }
             }
-        }
 
-        return licenses;
+            return licenses;
+        } finally {
+            log.debug("删除 Hystrix 线程本地变量...");
+            UserContextHolder.remove();
+        }
     }
 
     /**
