@@ -30,4 +30,9 @@ public class CustomFilter implements Filter {
 
         chain.doFilter(req, resp);
     }
+
+    @Override
+    public void destroy() {
+        log.debug("自定义Filter doFilter() destroy...");
+    }
 }

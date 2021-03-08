@@ -18,9 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class CustomInterceptor implements HandlerInterceptor {
 
-    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
+    @Override
+    public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) {
 
         log.debug("设置线程本地变量....");
+
         // 设置当前线程上下文
         UserContextHolder.getContext().setCorrelationId(req.getHeader(UserContext.CORRELATION_ID));
         UserContextHolder.getContext().setUserId(req.getHeader(UserContext.USER_ID));
@@ -32,7 +34,8 @@ public class CustomInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    public void afterCompletion(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) throws Exception {
+    @Override
+    public void afterCompletion(HttpServletRequest req, HttpServletResponse resp, Object handler, Exception ex) {
         log.debug("删除线程本地变量...");
         UserContextHolder.remove();
     }

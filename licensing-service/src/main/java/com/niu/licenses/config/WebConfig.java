@@ -1,6 +1,5 @@
 package com.niu.licenses.config;
 
-import com.google.common.collect.Lists;
 import com.niu.licenses.utils.UserContextInterceptor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -10,6 +9,8 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * web 配置类
@@ -38,7 +39,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder, ClientHttpRequestInterceptor userContextInterceptor) {
         RestTemplate restTemplate = builder.build();
-        restTemplate.setInterceptors(Lists.newArrayList(userContextInterceptor));
+        List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
+        interceptors.add(userContextInterceptor);
+        restTemplate.setInterceptors(interceptors);
         return builder.build();
     }
 

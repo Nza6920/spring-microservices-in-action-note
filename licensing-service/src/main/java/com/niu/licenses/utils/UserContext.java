@@ -14,10 +14,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserContext {
 
-    public static final String CORRELATION_ID = "niu-correlation-id";
-    public static final String AUTH_TOKEN = "niu-auth-token";
-    public static final String USER_ID = "niu-user-id";
-    public static final String ORG_ID = "niu-org-id";
+    public static final String CORRELATION_ID = "sys-correlation-id";
+    public static final String AUTH_TOKEN = "sys-auth-token";
+    public static final String USER_ID = "sys-user-id";
+    public static final String ORG_ID = "sys-org-id";
 
     /**
      * 关联ID
