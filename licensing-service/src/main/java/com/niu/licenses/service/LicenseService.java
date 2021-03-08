@@ -1,6 +1,7 @@
 package com.niu.licenses.service;
 
 import cn.hutool.core.util.IdUtil;
+import com.google.common.collect.Lists;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.niu.licenses.client.OrganizationDiscoveryClient;
@@ -63,7 +64,6 @@ public class LicenseService {
         return organization;
     }
 
-
     /**
      * 获取许可
      *
@@ -74,10 +74,13 @@ public class LicenseService {
      * @author nza
      * @createTime 2021/3/2 21:48
      */
-    @HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000")
+    @HystrixCommand(fallbackMethod = "buildFallbackLicense", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
     })
     public License getLicense(String organizationId, String licenseId, String clientType) {
+
+        // 随机睡眠
+        randomlyRunLong();
 
         License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
@@ -86,21 +89,34 @@ public class LicenseService {
         return license.setOrganization(org);
     }
 
+    private License buildFallbackLicense(String organizationId, String licenseId, String clientType) {
+
+        log.info("执行后备方法: buildFallbackLicense");
+
+        License license = new License();
+        license.setProductName("This is temp License")
+                .setOrganizationId(organizationId)
+                .setId(licenseId);
+
+        return license;
+    }
+
     /**
      * 查询组织下的许可
      * <p>
-     * @HystrixCommand 开启 hystrix 熔断器
-     * <p/>
      *
      * @param organizationId 组织ID
      * @param clientType     客户端类型
      * @return {@link java.util.List<com.niu.licenses.model.License>}
+     * @HystrixCommand 开启 hystrix 熔断器
+     * <p/>
      * @author nza
      * @createTime 2021/3/2 21:50
      */
-    @HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000")
-    })
+    @HystrixCommand(fallbackMethod = "buildFallbackLicenseList",
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")
+            })
     public List<License> getLicensesByOrg(String organizationId, String clientType) {
 
         // 随机睡眠
@@ -116,6 +132,27 @@ public class LicenseService {
         }
 
         return licenses;
+    }
+
+    /**
+     * 后备方法
+     *
+     * @param organizationId 机构ID
+     * @return {@link java.util.List<com.niu.licenses.model.License>} 许可证列表
+     * @createTime 2021/3/5 15:39
+     */
+    private List<License> buildFallbackLicenseList(String organizationId, String clientType) {
+
+        log.info("执行后备方法: buildFallbackLicenseList");
+
+        List<License> fallbackList = Lists.newArrayList();
+        License license = new License()
+                .setId("0000000-00-00000")
+                .setOrganizationId(organizationId)
+                .setProductName("Sorry no licensing information currently available");
+        fallbackList.add(license);
+
+        return fallbackList;
     }
 
     /**
