@@ -19,3 +19,23 @@ management:
       exposure:
         include: '*'
 
+# 配置 hystrix
+hystrix:
+  command:
+    #配置所有服务
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2500
+    # 配置指定的服务
+    licensingservice:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 7000
+
+# 配置指定服务的 ribbon 超时时间
+licensingservice:
+  ribbon:
+    readTimeout: 7000

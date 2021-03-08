@@ -47,4 +47,3 @@ logging:
 #  ribbon:
 #    # 指定请求会路由到的服务器列表
 #    listOfServers: http://licenseservice-static1:8081, http://licenseservice-static2:8082
-
