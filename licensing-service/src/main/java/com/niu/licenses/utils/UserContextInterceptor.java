@@ -18,6 +18,7 @@ import java.io.IOException;
  */
 public class UserContextInterceptor implements ClientHttpRequestInterceptor {
 
+    @Override
     public ClientHttpResponse intercept(HttpRequest req, byte[] bytes, ClientHttpRequestExecution execution) throws IOException {
         HttpHeaders headers = req.getHeaders();
         headers.add(UserContext.CORRELATION_ID, UserContextHolder.getContext().getCorrelationId());

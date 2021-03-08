@@ -7,6 +7,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.niu.licenses.client.OrganizationDiscoveryClient;
 import com.niu.licenses.client.OrganizationFeignClient;
 import com.niu.licenses.client.OrganizationRestTemplateClient;
+import com.niu.licenses.client.OutSideFeignClient;
 import com.niu.licenses.config.ServiceConfig;
 import com.niu.licenses.constant.ClientType;
 import com.niu.licenses.model.License;
@@ -15,10 +16,13 @@ import com.niu.licenses.repository.LicenseRepository;
 import com.niu.licenses.utils.UserContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.omg.CORBA.OBJECT_NOT_EXIST;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+
+
 
 /**
  * 许可证业务类
@@ -28,8 +32,8 @@ import java.util.Random;
  * @createTime [2021/03/02 21:44]
  */
 @Service
-@AllArgsConstructor
 @Slf4j
+@AllArgsConstructor
 public class LicenseService {
 
     private final LicenseRepository licenseRepository;
@@ -86,6 +90,7 @@ public class LicenseService {
             @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "15000"),
             @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "5")
     },
+            fallbackMethod = "buildFallbackLicense",
             threadPoolKey = "license",
             threadPoolProperties = {
                     @HystrixProperty(name = "coreSize", value = "30"),
@@ -132,8 +137,14 @@ public class LicenseService {
      * @createTime 2021/3/2 21:50
      */
     @HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000")
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "12000"),
+            @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
+            @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "75"),
+            @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "7000"),
+            @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "15000"),
+            @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "5")
     },
+            fallbackMethod = "buildFallbackLicense",
             threadPoolKey = "licensesByOrg",
             threadPoolProperties = {
                     @HystrixProperty(name = "coreSize", value = "30"),

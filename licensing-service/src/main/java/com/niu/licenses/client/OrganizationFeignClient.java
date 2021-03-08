@@ -1,6 +1,5 @@
 package com.niu.licenses.client;
 
-import com.niu.licenses.model.Organization;
 import com.niu.licenses.pojo.ServerResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

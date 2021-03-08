@@ -1,0 +1,50 @@
+server:
+  port: 7019
+
+eureka:
+  instance:
+    # 注册服务的 IP 而不是名称
+    prefer-ip-address: true
+  client:
+    # 注册自身到 eureka
+    register-with-eureka: true
+    # 在本地缓存注册表 每隔 30s 自动刷新服务
+    fetch-registry: true
+    service-url:
+      # 配置注册中心地址
+      defaultZone: http://localhost:7018/eureka/
+
+# 配置日志输出等级
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.niu.spring.zuul: DEBUG
+
+#zuul:
+#  routes:
+#    # 配置静态url映射
+#    # 用于在内部识别服务的关键字
+#    licensestatic:
+#    # 许可证服务的静态路由
+#    path: /licensestatic/**　
+#    # 已建立许可证服务的静态实例，它将被直接调用，而不是由Zuul通过Eureka调用
+#    url: http://licenseservice-static:8081
+
+
+#zuul:
+#  routes:
+#    licensestatic:
+#      path: /licensestatic/**
+#      # 定义一个服务ID，该服务ID将用于在Ribbon中查找服务
+#      serviceId: licensestatic
+#ribbon:
+#  eureka:
+#    # 在Ribbon中禁用Eureka支持
+#    enabled: false
+#
+#licensestatic:
+#  ribbon:
+#    # 指定请求会路由到的服务器列表
+#    listOfServers: http://licenseservice-static1:8081, http://licenseservice-static2:8082
+

@@ -1,0 +1,7 @@
+example:
+  property: "我是开发的外部调用配置"
+
+# 配置外部服务端口
+sidecar:
+  port: 7021
+  hostname: localhost

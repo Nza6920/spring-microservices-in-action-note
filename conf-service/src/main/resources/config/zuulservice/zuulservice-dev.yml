@@ -1,0 +1,17 @@
+example:
+  property: "我是开发配置"
+
+zuul:
+  # 配置 url 前缀
+  prefix: '/api'
+  # 配置需要忽略的服务 禁用所有服务
+  ignored-services: '*'
+  # 配置手动路由映射 只允许指定路由
+  routes:
+    organizationservice: '/organization/**'
+    licensingservice: '/licensingservice/**'
+
+# 配置 actuator
+management:
+  endpoints:
+    enabled-by-default: false

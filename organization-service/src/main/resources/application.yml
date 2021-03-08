@@ -13,9 +13,3 @@ eureka:
     service-url:
       # 配置注册中心地址
       defaultZone: http://localhost:7018/eureka/
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'

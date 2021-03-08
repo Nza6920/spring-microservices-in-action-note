@@ -1,0 +1,8 @@
+server:
+  port: 7021
+  servlet:
+    context-path: /outside
+
+spring:
+  application:
+    name: outsideservice
