@@ -165,4 +165,19 @@ public class FilterUtil {
         RequestContext ctx = RequestContext.getCurrentContext();
         ctx.addZuulRequestHeader(AUTH_TOKEN, authToken);
     }
+
+    /**
+     * 获取服务ID
+     * @author nza
+     * @createTime 2021/3/9 16:19
+     * @return	{@link java.lang.String}
+     */
+    public String getServiceId(){
+        RequestContext ctx = RequestContext.getCurrentContext();
+
+        if (ctx.get("serviceId")==null) {
+            return "";
+        }
+        return ctx.get("serviceId").toString();
+    }
 }

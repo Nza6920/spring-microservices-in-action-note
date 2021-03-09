@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * <功能简述>
+ * 自定义请求拦截器
  *
  * @author [nza]
  * @version 1.0 [2021/03/07 13:09]

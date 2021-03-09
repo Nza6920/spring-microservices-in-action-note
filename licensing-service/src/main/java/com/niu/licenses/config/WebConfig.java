@@ -42,7 +42,7 @@ public class WebConfig implements WebMvcConfigurer {
         List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();
         interceptors.add(userContextInterceptor);
         restTemplate.setInterceptors(interceptors);
-        return builder.build();
+        return restTemplate;
     }
 
     /**

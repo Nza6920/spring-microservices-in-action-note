@@ -45,4 +45,16 @@ organizationservice.yml
 organizationservice-dev.yml
 organizationservice-prod.yml
 
+organizationservicev2.yml
+organizationservicev2-dev.yml
+organizationservicev2-prod.yml
+
+specialroutesservice.yml
+specialroutesservice-dev.yml
+specialroutesservice-prod.yml
+
 /conf-service/src/main/resources/application.yml
+outside-service/src/test/
+sidecar-service/src/test/
+specialroutes-service/src/test/
+src/test/

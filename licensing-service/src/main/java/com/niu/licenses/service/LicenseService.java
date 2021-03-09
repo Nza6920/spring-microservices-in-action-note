@@ -7,7 +7,6 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.niu.licenses.client.OrganizationDiscoveryClient;
 import com.niu.licenses.client.OrganizationFeignClient;
 import com.niu.licenses.client.OrganizationRestTemplateClient;
-import com.niu.licenses.client.OutSideFeignClient;
 import com.niu.licenses.config.ServiceConfig;
 import com.niu.licenses.constant.ClientType;
 import com.niu.licenses.model.License;
@@ -16,12 +15,10 @@ import com.niu.licenses.repository.LicenseRepository;
 import com.niu.licenses.utils.UserContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.CORBA.OBJECT_NOT_EXIST;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
-
 
 
 /**
@@ -144,7 +141,7 @@ public class LicenseService {
             @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "15000"),
             @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "5")
     },
-            fallbackMethod = "buildFallbackLicense",
+            fallbackMethod = "buildFallbackLicenseList",
             threadPoolKey = "licensesByOrg",
             threadPoolProperties = {
                     @HystrixProperty(name = "coreSize", value = "30"),
@@ -156,7 +153,7 @@ public class LicenseService {
             log.debug("Service[查询组织下的许可] Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
 
             // 随机睡眠
-            randomlyRunLong();
+            // randomlyRunLong();
 
             List<License> licenses = licenseRepository.findByOrganizationId(organizationId);
 
@@ -206,7 +203,7 @@ public class LicenseService {
         int randomNum = random.nextInt(3) + 1;
 
         if (randomNum == 3) {
-            log.info("开始睡眠: {}s", random);
+            log.info("开始睡眠: {}s", randomNum);
             sleep();
         }
     }

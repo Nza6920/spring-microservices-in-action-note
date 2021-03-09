@@ -21,8 +21,12 @@ spring:
         #native:
         # 指定配置文件位置
         #search-locations:
-        #- classpath:/config/licensingservice
-        #- classpath:/config/organizationservice
+             - classpath:/config/licensingservice
+             - classpath:/config/organizationservice
+             - classpath:/config/zuulservice
+             - classpath:/config/sidecarservice
+             - classpath:/config/specialroutesservice
+             - classpath:/config/organizationservicev2
 
 eureka:
   instance:

@@ -15,10 +15,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @version 1.0 [2021/03/01 10:46]
  * @RefreshScope 刷新配置文件
  * 访问：http://ip:port/refresh
- *
- * @EnableCircuitBreaker 使用 hystrix
+ * EnableCircuitBreaker 使用 hystrix
+ * EnableDiscoveryClient 使用 DiscoveryClient {@link com.niu.licenses.client.OrganizationDiscoveryClient}
  * <p/>
- *
  * @createTime [2021/03/01 10:46]
  */
 @SpringBootApplication

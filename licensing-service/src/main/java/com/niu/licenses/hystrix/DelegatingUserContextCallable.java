@@ -7,7 +7,7 @@ import com.niu.licenses.utils.UserContextHolder;
 import java.util.concurrent.Callable;
 
 /**
- * <功能简述>
+ * 自定义线程处理逻辑
  *
  * @author [nza]
  * @version 1.0 [2021/03/07 13:40]
@@ -29,6 +29,7 @@ public class DelegatingUserContextCallable<V> implements Callable<V> {
      * @author nza
      * @createTime 2021/3/7 13:58
      */
+    @Override
     public V call() throws Exception {
 
         // 设置当前线程的上下文对象

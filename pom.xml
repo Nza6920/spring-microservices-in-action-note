@@ -16,6 +16,8 @@
         <module>zuul-service</module>
         <module>sidecar-service</module>
         <module>outside-service</module>
+        <module>specialroutes-service</module>
+        <module>organization-v2-service</module>
     </modules>
 
     <properties>

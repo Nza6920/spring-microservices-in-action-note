@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -13,20 +14,21 @@ import java.io.IOException;
  * @version 1.0 [2021/03/07 12:24]
  * @createTime [2021/03/07 12:24]
  */
-@Component
+//@Component
 @Slf4j
 public class CustomFilter implements Filter {
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 
         log.debug("自定义Filter doFilter() Running...");
 
-//        HttpServletRequest servletRequest = (HttpServletRequest) req;
+        HttpServletRequest servletRequest = (HttpServletRequest) req;
         // 设置当前线程上下文
-//        UserContextHolder.getContext().setCorrelationId(servletRequest.getHeader(UserContext.CORRELATION_ID));
-//        UserContextHolder.getContext().setUserId(servletRequest.getHeader(UserContext.USER_ID));
-//        UserContextHolder.getContext().setAuthToken(servletRequest.getHeader(UserContext.AUTH_TOKEN));
-//        UserContextHolder.getContext().setOrgId(servletRequest.getHeader(UserContext.ORG_ID));
+        UserContextHolder.getContext().setCorrelationId(servletRequest.getHeader(UserContext.CORRELATION_ID));
+        UserContextHolder.getContext().setUserId(servletRequest.getHeader(UserContext.USER_ID));
+        UserContextHolder.getContext().setAuthToken(servletRequest.getHeader(UserContext.AUTH_TOKEN));
+        UserContextHolder.getContext().setOrgId(servletRequest.getHeader(UserContext.ORG_ID));
 
         chain.doFilter(req, resp);
     }

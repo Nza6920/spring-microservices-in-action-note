@@ -8,8 +8,9 @@ zuul:
   ignored-services: '*'
   # 配置手动路由映射 只允许指定路由
   routes:
-    organizationservice: '/organization/**'
+    organizationservice: '/organizationservice/**'
     licensingservice: '/licensingservice/**'
+    organizationservicev2: '/organizationservicev2/**'
 
 # 配置 actuator
 management:
@@ -27,15 +28,16 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 2500
+            timeoutInMilliseconds: 7000
     # 配置指定的服务
     licensingservice:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 7000
+            timeoutInMilliseconds: 10000
 
 # 配置指定服务的 ribbon 超时时间
 licensingservice:
   ribbon:
+    connectTimeout: 7000
     readTimeout: 7000
