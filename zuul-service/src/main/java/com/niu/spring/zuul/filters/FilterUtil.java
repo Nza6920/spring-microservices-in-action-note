@@ -23,6 +23,11 @@ public class FilterUtil {
     public static final String ORG_ID = "sys-org-id";
 
     /**
+     * 上下文实体
+     */
+    public static final String SERVER_ID = "serviceId";
+
+    /**
      * 前置
      */
     public static final String PRE_FILTER_TYPE = "pre";
@@ -175,9 +180,10 @@ public class FilterUtil {
     public String getServiceId(){
         RequestContext ctx = RequestContext.getCurrentContext();
 
-        if (ctx.get("serviceId")==null) {
-            return "";
+        if (ctx.get(SERVER_ID) == null) {
+            return StrUtil.EMPTY;
         }
-        return ctx.get("serviceId").toString();
+
+        return ctx.get(SERVER_ID).toString();
     }
 }

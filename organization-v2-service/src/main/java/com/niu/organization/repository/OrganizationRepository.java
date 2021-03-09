@@ -1,8 +1,8 @@
-package organization.repository;
+package com.niu.organization.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import organization.model.Organization;
+import com.niu.organization.model.Organization;
 
 /**
  * 机构数据库操作对象

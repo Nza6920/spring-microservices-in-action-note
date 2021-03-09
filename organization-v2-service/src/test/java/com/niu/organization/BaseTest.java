@@ -1,4 +1,4 @@
-package organization;
+package com.niu.organization;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

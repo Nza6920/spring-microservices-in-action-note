@@ -1,4 +1,4 @@
-package organization.model;
+package com.niu.organization.model;
 
 
 import lombok.Data;

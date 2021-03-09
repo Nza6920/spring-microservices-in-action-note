@@ -1,10 +1,10 @@
-package organization.service;
+package com.niu.organization.service;
 
 import cn.hutool.core.util.IdUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import organization.model.Organization;
-import organization.repository.OrganizationRepository;
+import com.niu.organization.model.Organization;
+import com.niu.organization.repository.OrganizationRepository;
 
 import java.util.List;
 import java.util.Optional;

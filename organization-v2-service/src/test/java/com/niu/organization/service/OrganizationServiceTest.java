@@ -1,11 +1,11 @@
-package organization.service;
+package com.niu.organization.service;
 
 
 import cn.hutool.core.util.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import organization.BaseTest;
-import organization.model.Organization;
+import com.niu.organization.BaseTest;
+import com.niu.organization.model.Organization;
 
 import javax.annotation.Resource;
 

@@ -1,11 +1,12 @@
-package organization.controller;
+package com.niu.organization.controller;
 
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import organization.model.Organization;
-import organization.pojo.ServerResponse;
-import organization.service.OrganizationService;
+import com.niu.organization.model.Organization;
+import com.niu.organization.pojo.ServerResponse;
+import com.niu.organization.service.OrganizationService;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "v2/organizations")
 @AllArgsConstructor
+@Slf4j
 public class OrganizationServiceController {
 
     private final OrganizationService organizationService;
@@ -33,6 +35,7 @@ public class OrganizationServiceController {
      */
     @GetMapping("/{organizationId}")
     public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId) {
+        log.debug("组织服务V2: getOrganization()");
         return ServerResponse.createBySuccess(organizationService.findById(organizationId));
     }
 
@@ -59,6 +62,7 @@ public class OrganizationServiceController {
      */
     @GetMapping()
     public ServerResponse<List<Organization>> findAllOrganization() {
+        log.debug("组织服务V2: findAllOrganization()");
         return ServerResponse.createBySuccess(organizationService.findAllOrganization());
     }
 }

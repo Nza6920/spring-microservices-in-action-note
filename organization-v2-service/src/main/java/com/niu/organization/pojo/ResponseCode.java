@@ -1,4 +1,4 @@
-package organization.pojo;
+package com.niu.organization.pojo;
 
 /**
  * 响应类型

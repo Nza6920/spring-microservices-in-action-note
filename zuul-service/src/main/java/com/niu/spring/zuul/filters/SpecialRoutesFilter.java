@@ -1,5 +1,7 @@
 package com.niu.spring.zuul.filters;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -7,14 +9,38 @@ import com.niu.spring.zuul.model.AbTestingRoute;
 import com.niu.spring.zuul.pojo.ServerResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.message.BasicHttpRequest;
+import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * 动态路由过滤器
@@ -30,10 +56,13 @@ public class SpecialRoutesFilter extends ZuulFilter {
 
     private static final int FILTER_ORDER = 1;
     private static final boolean SHOULD_FILTER = true;
+    private static final String FORWARD_VERSION = "v2";
 
     private final FilterUtil filterUtil;
 
     private final RestTemplate restTemplate;
+
+    private ProxyRequestHelper helper = new ProxyRequestHelper();
 
     /**
      * 动态路由过滤器
@@ -89,8 +118,215 @@ public class SpecialRoutesFilter extends ZuulFilter {
     public Object run() throws ZuulException {
         RequestContext ctx = RequestContext.getCurrentContext();
         log.debug("SpecialRoutesFilter 处理请求响应: {}, 关联ID: {}", ctx.getRequest().getRequestURI(), filterUtil.getCorrelationId());
-        AbTestingRoute abRoutingInfo = getAbRoutingInfo(filterUtil.getServiceId());
+
+        AbTestingRoute abTestingRoute = getAbRoutingInfo(filterUtil.getServiceId());
+
+        if (abTestingRoute != null && useSpecialRoute(abTestingRoute)) {
+            String serviceName = filterUtil.getServiceId();
+            if (StrUtil.isEmpty(serviceName)) {
+                throw new IllegalArgumentException("非法的服务名称");
+            }
+            String route = buildRouteString(ctx.getRequest().getRequestURI(), abTestingRoute.getEndpoint(), serviceName);
+
+            log.debug("触发动态路由, 地址: {}", route);
+
+            // 转发请求
+            forwardToSpecialRoute(route);
+        }
 
         return null;
+    }
+
+    /**
+     * 转发请求
+     *
+     * @param route 转发路由地址
+     */
+    private void forwardToSpecialRoute(String route) {
+        RequestContext context = RequestContext.getCurrentContext();
+        HttpServletRequest request = context.getRequest();
+
+        // 创建转发的头部副本
+        MultiValueMap<String, String> headers = this.helper
+                .buildZuulRequestHeaders(request);
+
+        // 创建转发的参数副本
+        MultiValueMap<String, String> params = this.helper
+                .buildZuulRequestQueryParams(request);
+        String verb = getVerb(request);
+
+        // 创建转发的主体副本
+        InputStream requestEntity = getRequestBody(request);
+        if (request.getContentLength() < 0) {
+            context.setChunkedRequestBody();
+        }
+
+        this.helper.addIgnoredHeaders();
+        CloseableHttpClient httpClient = null;
+        HttpResponse response = null;
+
+        try {
+            httpClient = HttpClients.createDefault();
+
+            // 转发请求
+            response = forward(httpClient, verb, route, request, headers, params, requestEntity);
+
+            // 将转发后的响应保存会zuul服务器
+            setResponse(response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException ex) {
+                log.error("关闭 httpClient 客户端异常: ", ex);
+            }
+        }
+    }
+
+    private String getVerb(HttpServletRequest request) {
+        String sMethod = request.getMethod();
+        return sMethod.toUpperCase();
+    }
+
+    private InputStream getRequestBody(HttpServletRequest request) {
+        InputStream requestEntity = null;
+        try {
+            requestEntity = request.getInputStream();
+        } catch (IOException ex) {
+            // no requestBody is ok.
+        }
+        return requestEntity;
+    }
+
+    private MultiValueMap<String, String> revertHeaders(Header[] headers) {
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        for (Header header : headers) {
+            String name = header.getName();
+            if (!map.containsKey(name)) {
+                map.put(name, new ArrayList<String>());
+            }
+            map.get(name).add(header.getValue());
+        }
+        return map;
+    }
+
+    private void setResponse(HttpResponse response) throws IOException {
+        this.helper.setResponse(response.getStatusLine().getStatusCode(),
+                response.getEntity() == null ? null : response.getEntity().getContent(),
+                revertHeaders(response.getAllHeaders()));
+    }
+
+    /**
+     * 判断是否动态路由
+     *
+     * @param testingRoute
+     * @return {@link boolean}
+     */
+    public boolean useSpecialRoute(AbTestingRoute testingRoute) {
+
+        Random random = new Random();
+
+        int value = RandomUtil.randomInt(10) + 1;
+
+        return testingRoute.getWeight() < value;
+    }
+
+    /**
+     * 构建路由地址
+     *
+     * @param oldEndpoint 旧终点
+     * @param newEndpoint 新终点
+     * @param serviceName 服务名
+     * @return {@link String} 目标路由
+     */
+    private String buildRouteString(String oldEndpoint, String newEndpoint, String serviceName) {
+        int index = oldEndpoint.indexOf(serviceName);
+
+        String strippedRoute = oldEndpoint.substring(index + serviceName.length() + FORWARD_VERSION.length() + 1);
+
+        String targetRoute = String.format("%s/%s%s", newEndpoint, FORWARD_VERSION, strippedRoute);
+
+        return targetRoute;
+    }
+
+    /**
+     * 获取主机
+     *
+     * @param url
+     * @return {@link org.apache.http.HttpHost}
+     * @author nza
+     * @createTime 2021/3/9 22:01
+     */
+    private HttpHost getHttpHost(URL url) {
+        HttpHost httpHost = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
+        return httpHost;
+    }
+
+    /**
+     * 转发请求
+     *
+     * @return {@link HttpResponse} http 响应
+     * @throws Exception {@link Exception} 转发失败抛出
+     */
+    private HttpResponse forward(HttpClient httpclient,
+                                 String verb,
+                                 String uri,
+                                 HttpServletRequest request,
+                                 MultiValueMap<String, String> headers,
+                                 MultiValueMap<String, String> params,
+                                 InputStream requestEntity) throws Exception {
+
+        Map<String, Object> info = this.helper.debug(verb, uri, headers, params, requestEntity);
+
+        URL host = new URL(uri);
+
+        HttpHost httpHost = getHttpHost(host);
+
+        HttpRequest httpRequest;
+        int contentLength = request.getContentLength();
+        InputStreamEntity entity = new InputStreamEntity(requestEntity,
+                contentLength,
+                request.getContentType() != null ? ContentType.create(request.getContentType()) : null);
+        switch (verb.toUpperCase()) {
+            case "POST":
+                HttpPost httpPost = new HttpPost(uri);
+                httpRequest = httpPost;
+                httpPost.setEntity(entity);
+                break;
+            case "PUT":
+                HttpPut httpPut = new HttpPut(uri);
+                httpRequest = httpPut;
+                httpPut.setEntity(entity);
+                break;
+            case "PATCH":
+                HttpPatch httpPatch = new HttpPatch(uri);
+                httpRequest = httpPatch;
+                httpPatch.setEntity(entity);
+                break;
+            default:
+                httpRequest = new BasicHttpRequest(verb, uri);
+        }
+        try {
+            httpRequest.setHeaders(convertHeaders(headers));
+            HttpResponse zuulResponse = forwardRequest(httpclient, httpHost, httpRequest);
+            return zuulResponse;
+        } finally {
+        }
+    }
+
+    private HttpResponse forwardRequest(HttpClient httpclient, HttpHost httpHost, HttpRequest httpRequest) throws IOException {
+        return httpclient.execute(httpHost, httpRequest);
+    }
+
+    private Header[] convertHeaders(MultiValueMap<String, String> headers) {
+        List<Header> list = new ArrayList<>();
+        for (String name : headers.keySet()) {
+            for (String value : headers.get(name)) {
+                list.add(new BasicHeader(name, value));
+            }
+        }
+        return list.toArray(new BasicHeader[0]);
     }
 }

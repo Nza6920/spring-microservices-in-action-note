@@ -1,4 +1,4 @@
-package organization.pojo;
+package com.niu.organization.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
