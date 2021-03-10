@@ -37,7 +37,11 @@ public class OrganizationServiceController {
     @GetMapping("/{organizationId}")
     public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId, HttpServletRequest request) {
         log.debug("组织服务V2: getOrganization()");
-        return ServerResponse.createBySuccess(organizationService.findById(organizationId));
+        Organization organization = organizationService.findById(organizationId);
+        if (organization != null) {
+            organization.setName("v2--" + organization.getName());
+        }
+        return ServerResponse.createBySuccess(organization);
     }
 
     /**
@@ -64,6 +68,10 @@ public class OrganizationServiceController {
     @GetMapping()
     public ServerResponse<List<Organization>> findAllOrganization(HttpServletRequest request) {
         log.debug("组织服务V2: findAllOrganization()");
-        return ServerResponse.createBySuccess(organizationService.findAllOrganization());
+        List<Organization> allOrganization = organizationService.findAllOrganization();
+        for (Organization organization : allOrganization) {
+            organization.setName("v2--" + organization.getName());
+        }
+        return ServerResponse.createBySuccess(allOrganization);
     }
 }

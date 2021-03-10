@@ -39,6 +39,22 @@ public class AbTestingRoute {
      */
     Integer weight;
 
+
+    /**
+     * 目标服务
+     */
+    String targetServiceName;
+
+    /**
+     * 当前版本
+     */
+    String currentVersion;
+
+    /**
+     * 目标版本
+     */
+    String targetVersion;
+
     /**
      * 设置属性
      *

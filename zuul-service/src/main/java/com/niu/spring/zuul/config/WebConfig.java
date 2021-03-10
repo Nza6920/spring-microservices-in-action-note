@@ -72,7 +72,7 @@ public class WebConfig {
      * @return {@link CustomSimpleHostRoutingFilter}
      * @author nza
      */
-    @Bean
+//    @Bean
     public SimpleHostRoutingFilter customSimpleHostRoutingFilter(ProxyRequestHelper helper,
                                                                  ZuulProperties zuulProperties,
                                                                  ApacheHttpClientConnectionManagerFactory connectionManagerFactory,

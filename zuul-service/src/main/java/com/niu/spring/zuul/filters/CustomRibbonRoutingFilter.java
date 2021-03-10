@@ -1,13 +1,19 @@
 package com.niu.spring.zuul.filters;
 
+import cn.hutool.core.util.StrUtil;
 import com.netflix.zuul.context.RequestContext;
+import com.niu.spring.zuul.model.AbTestingRoute;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.netflix.ribbon.support.RibbonCommandContext;
 import org.springframework.cloud.netflix.ribbon.support.RibbonRequestCustomizer;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
 import org.springframework.cloud.netflix.zuul.filters.route.RibbonCommandFactory;
 import org.springframework.cloud.netflix.zuul.filters.route.RibbonRoutingFilter;
 
+import java.text.MessageFormat;
 import java.util.List;
+
+import static com.niu.spring.zuul.filters.FilterUtil.AB_TESTING_ROUTE;
 
 /**
  * 自定义 RibbonRoutingFilter
@@ -18,6 +24,9 @@ import java.util.List;
  */
 @Slf4j
 public class CustomRibbonRoutingFilter extends RibbonRoutingFilter {
+
+    private static final String VERSION_PATTERN = "/{0}/";
+
     public CustomRibbonRoutingFilter(ProxyRequestHelper helper, RibbonCommandFactory<?> ribbonCommandFactory, List<RibbonRequestCustomizer> requestCustomizers) {
         super(helper, ribbonCommandFactory, requestCustomizers);
     }
@@ -34,5 +43,25 @@ public class CustomRibbonRoutingFilter extends RibbonRoutingFilter {
         }
 
         return !((Boolean) specialRouteFlag) && super.shouldFilter();
+    }
+
+    @Override
+    protected RibbonCommandContext buildCommandContext(RequestContext context) {
+        RibbonCommandContext ribbonCommandContext = super.buildCommandContext(context);
+
+        AbTestingRoute abTestingRoute = (AbTestingRoute) context.get(AB_TESTING_ROUTE);
+        if (abTestingRoute != null) {
+            String uri = ribbonCommandContext.getUri();
+            String newUri = StrUtil.replace(uri, MessageFormat.format(VERSION_PATTERN, abTestingRoute.getCurrentVersion()), MessageFormat.format(VERSION_PATTERN, abTestingRoute.getTargetVersion()));
+            return new RibbonCommandContext(abTestingRoute.getTargetServiceName(),
+                    ribbonCommandContext.getMethod(),
+                    newUri,
+                    ribbonCommandContext.getRetryable(), ribbonCommandContext.getHeaders(),
+                    ribbonCommandContext.getParams(),
+                    ribbonCommandContext.getRequestEntity(), this.requestCustomizers,
+                    ribbonCommandContext.getContentLength(), ribbonCommandContext.getLoadBalancerKey());
+        } else {
+            return ribbonCommandContext;
+        }
     }
 }

@@ -60,7 +60,7 @@ public class ResponseFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        log.debug("TrackingFilter 处理请求响应: {}, 关联ID: {}", ctx.getRequest().getRequestURI(), filterUtil.getCorrelationId());
+        log.debug("ResponseFilter 处理请求响应: {}, 关联ID: {}", ctx.getRequest().getRequestURI(), filterUtil.getCorrelationId());
 
         // 将 关联ID 携带在响应头中
         ctx.getResponse()

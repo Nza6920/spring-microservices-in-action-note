@@ -31,6 +31,7 @@ public class FilterUtil {
      * 是否动态路由
      */
     public static final String SPECIAL_ROUTE_FLAG = "specialRouteFlag";
+    public static final String AB_TESTING_ROUTE = "abTestingRoute";
 
     /**
      * 获取关联ID

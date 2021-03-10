@@ -45,4 +45,22 @@ public class AbTestingRoute {
      */
     @Column(name = "weight", nullable = false)
     Integer weight;
+
+    /**
+     * 目标服务
+     */
+    @Column(name = "target_service_name", nullable = false)
+    String targetServiceName;
+
+    /**
+     * 当前版本
+     */
+    @Column(name = "current_version", nullable = false)
+    String currentVersion;
+
+    /**
+     * 目标版本
+     */
+    @Column(name = "target_version", nullable = false)
+    String targetVersion;
 }

@@ -52,7 +52,7 @@ import java.util.Map;
  * @version 1.0 [2021/03/09 16:00]
  * @createTime [2021/03/09 16:00]
  */
-@Component
+//@Component
 @Slf4j
 @AllArgsConstructor
 public class SpecialRoutesFilter extends ZuulFilter {
