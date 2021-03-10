@@ -8,6 +8,7 @@ import com.niu.organization.model.Organization;
 import com.niu.organization.pojo.ServerResponse;
 import com.niu.organization.service.OrganizationService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class OrganizationServiceController {
      * @createTime 2021/3/3 17:21
      */
     @GetMapping("/{organizationId}")
-    public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId) {
+    public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId, HttpServletRequest request) {
         log.debug("组织服务V2: getOrganization()");
         return ServerResponse.createBySuccess(organizationService.findById(organizationId));
     }
@@ -61,7 +62,7 @@ public class OrganizationServiceController {
      * @createTime 2021/3/3 17:21
      */
     @GetMapping()
-    public ServerResponse<List<Organization>> findAllOrganization() {
+    public ServerResponse<List<Organization>> findAllOrganization(HttpServletRequest request) {
         log.debug("组织服务V2: findAllOrganization()");
         return ServerResponse.createBySuccess(organizationService.findAllOrganization());
     }

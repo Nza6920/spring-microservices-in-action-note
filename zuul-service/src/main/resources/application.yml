@@ -21,6 +21,10 @@ logging:
     org.springframework.web: WARN
     com.niu.spring.zuul: DEBUG
 
+zuul:
+  host:
+    connect-timeout-millis: 5000
+
 #zuul:
 #  routes:
 #    # 配置静态url映射

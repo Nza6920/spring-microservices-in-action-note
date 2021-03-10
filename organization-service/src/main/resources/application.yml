@@ -13,3 +13,10 @@ eureka:
     service-url:
       # 配置注册中心地址
       defaultZone: http://localhost:7018/eureka/
+
+# 配置日志输出等级
+logging:
+  level:
+    com.netflix: WARN
+    org.springframework.web: WARN
+    com.niu: DEBUG

@@ -2,6 +2,7 @@ package com.niu.spring.zuul.filters;
 
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Lists;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -24,6 +25,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicHttpRequest;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
+import org.springframework.cloud.netflix.zuul.filters.route.SimpleHostRoutingFilter;
+import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,18 +43,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * 动态路由过滤器
+ * 参考 {@link SimpleHostRoutingFilter}
  *
  * @author [nza]
  * @version 1.0 [2021/03/09 16:00]
  * @createTime [2021/03/09 16:00]
  */
 @Component
-@AllArgsConstructor
 @Slf4j
+@AllArgsConstructor
 public class SpecialRoutesFilter extends ZuulFilter {
 
     private static final int FILTER_ORDER = 1;
@@ -62,7 +65,7 @@ public class SpecialRoutesFilter extends ZuulFilter {
 
     private final RestTemplate restTemplate;
 
-    private ProxyRequestHelper helper = new ProxyRequestHelper();
+    private final ProxyRequestHelper helper;
 
     /**
      * 动态路由过滤器
@@ -71,7 +74,7 @@ public class SpecialRoutesFilter extends ZuulFilter {
      */
     @Override
     public String filterType() {
-        return FilterUtil.ROUTE_FILTER_TYPE;
+        return FilterConstants.ROUTE_TYPE;
     }
 
     /**
@@ -122,16 +125,26 @@ public class SpecialRoutesFilter extends ZuulFilter {
         AbTestingRoute abTestingRoute = getAbRoutingInfo(filterUtil.getServiceId());
 
         if (abTestingRoute != null && useSpecialRoute(abTestingRoute)) {
+
             String serviceName = filterUtil.getServiceId();
             if (StrUtil.isEmpty(serviceName)) {
-                throw new IllegalArgumentException("非法的服务名称");
+                return null;
             }
+
             String route = buildRouteString(ctx.getRequest().getRequestURI(), abTestingRoute.getEndpoint(), serviceName);
 
             log.debug("触发动态路由, 地址: {}", route);
 
+            // todo: 这里必须把 动态路由标记设置为 true 来禁止 SimpleHostRoutingFilter 执行
+            // 否则会出现动态路由服务和非动态路由服务同时被调用的情况
+            filterUtil.setSpecialRouteFlag(true);
+
             // 转发请求
-            forwardToSpecialRoute(route);
+            return forwardToSpecialRoute(route);
+
+        } else {
+            // 设置动态路由标记
+            filterUtil.setSpecialRouteFlag(false);
         }
 
         return null;
@@ -141,8 +154,9 @@ public class SpecialRoutesFilter extends ZuulFilter {
      * 转发请求
      *
      * @param route 转发路由地址
+     * @return
      */
-    private void forwardToSpecialRoute(String route) {
+    private HttpResponse forwardToSpecialRoute(String route) {
         RequestContext context = RequestContext.getCurrentContext();
         HttpServletRequest request = context.getRequest();
 
@@ -163,7 +177,7 @@ public class SpecialRoutesFilter extends ZuulFilter {
 
         this.helper.addIgnoredHeaders();
         CloseableHttpClient httpClient = null;
-        HttpResponse response = null;
+        HttpResponse response;
 
         try {
             httpClient = HttpClients.createDefault();
@@ -173,15 +187,21 @@ public class SpecialRoutesFilter extends ZuulFilter {
 
             // 将转发后的响应保存会zuul服务器
             setResponse(response);
+
+            return response;
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
             try {
-                httpClient.close();
+                if (httpClient != null) {
+                    httpClient.close();
+                }
             } catch (IOException ex) {
                 log.error("关闭 httpClient 客户端异常: ", ex);
             }
         }
+
+        return null;
     }
 
     private String getVerb(HttpServletRequest request) {
@@ -201,11 +221,11 @@ public class SpecialRoutesFilter extends ZuulFilter {
 
     private MultiValueMap<String, String> revertHeaders(Header[] headers) {
 
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         for (Header header : headers) {
             String name = header.getName();
             if (!map.containsKey(name)) {
-                map.put(name, new ArrayList<String>());
+                map.put(name, Lists.newArrayList());
             }
             map.get(name).add(header.getValue());
         }
@@ -213,6 +233,7 @@ public class SpecialRoutesFilter extends ZuulFilter {
     }
 
     private void setResponse(HttpResponse response) throws IOException {
+        RequestContext.getCurrentContext().set("zuulResponse", response);
         this.helper.setResponse(response.getStatusLine().getStatusCode(),
                 response.getEntity() == null ? null : response.getEntity().getContent(),
                 revertHeaders(response.getAllHeaders()));
@@ -225,8 +246,6 @@ public class SpecialRoutesFilter extends ZuulFilter {
      * @return {@link boolean}
      */
     public boolean useSpecialRoute(AbTestingRoute testingRoute) {
-
-        Random random = new Random();
 
         int value = RandomUtil.randomInt(10) + 1;
 
@@ -246,9 +265,7 @@ public class SpecialRoutesFilter extends ZuulFilter {
 
         String strippedRoute = oldEndpoint.substring(index + serviceName.length() + FORWARD_VERSION.length() + 1);
 
-        String targetRoute = String.format("%s/%s%s", newEndpoint, FORWARD_VERSION, strippedRoute);
-
-        return targetRoute;
+        return String.format("%s/%s%s", newEndpoint, FORWARD_VERSION, strippedRoute);
     }
 
     /**
@@ -260,8 +277,7 @@ public class SpecialRoutesFilter extends ZuulFilter {
      * @createTime 2021/3/9 22:01
      */
     private HttpHost getHttpHost(URL url) {
-        HttpHost httpHost = new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
-        return httpHost;
+        return new HttpHost(url.getHost(), url.getPort(), url.getProtocol());
     }
 
     /**
@@ -308,12 +324,16 @@ public class SpecialRoutesFilter extends ZuulFilter {
             default:
                 httpRequest = new BasicHttpRequest(verb, uri);
         }
-        try {
-            httpRequest.setHeaders(convertHeaders(headers));
-            HttpResponse zuulResponse = forwardRequest(httpclient, httpHost, httpRequest);
-            return zuulResponse;
-        } finally {
-        }
+
+        httpRequest.setHeaders(convertHeaders(headers));
+
+        HttpResponse zuulResponse = forwardRequest(httpclient, httpHost, httpRequest);
+
+        this.helper.appendDebug(info, zuulResponse.getStatusLine().getStatusCode(),
+                revertHeaders(zuulResponse.getAllHeaders()));
+
+        return zuulResponse;
+
     }
 
     private HttpResponse forwardRequest(HttpClient httpclient, HttpHost httpHost, HttpRequest httpRequest) throws IOException {

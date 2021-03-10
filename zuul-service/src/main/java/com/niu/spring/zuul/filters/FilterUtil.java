@@ -28,19 +28,9 @@ public class FilterUtil {
     public static final String SERVER_ID = "serviceId";
 
     /**
-     * 前置
+     * 是否动态路由
      */
-    public static final String PRE_FILTER_TYPE = "pre";
-
-    /**
-     * 后置
-     */
-    public static final String POST_FILTER_TYPE = "post";
-
-    /**
-     * 路由
-     */
-    public static final String ROUTE_FILTER_TYPE = "route";
+    public static final String SPECIAL_ROUTE_FLAG = "specialRouteFlag";
 
     /**
      * 获取关联ID
@@ -173,11 +163,12 @@ public class FilterUtil {
 
     /**
      * 获取服务ID
+     *
+     * @return {@link java.lang.String}
      * @author nza
      * @createTime 2021/3/9 16:19
-     * @return	{@link java.lang.String}
      */
-    public String getServiceId(){
+    public String getServiceId() {
         RequestContext ctx = RequestContext.getCurrentContext();
 
         if (ctx.get(SERVER_ID) == null) {
@@ -185,5 +176,28 @@ public class FilterUtil {
         }
 
         return ctx.get(SERVER_ID).toString();
+    }
+
+    /**
+     * 设置 ServiceId
+     *
+     * @author nza
+     * @createTime 2021/3/9 16:19
+     */
+    public void setServiceId(String serviceId) {
+        RequestContext ctx = RequestContext.getCurrentContext();
+
+        ctx.set(SERVER_ID, serviceId);
+    }
+
+    /**
+     * 设置动态路由标记
+     *
+     * @author nza
+     * @createTime 2021/3/9 16:19
+     */
+    public void setSpecialRouteFlag(boolean res) {
+        RequestContext ctx = RequestContext.getCurrentContext();
+        ctx.set(SPECIAL_ROUTE_FLAG, res);
     }
 }

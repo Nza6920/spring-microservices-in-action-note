@@ -5,6 +5,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,7 +35,7 @@ public class TrackingFilter extends ZuulFilter {
      */
     @Override
     public String filterType() {
-        return FilterUtil.PRE_FILTER_TYPE;
+        return FilterConstants.PRE_TYPE;
     }
 
     /**
