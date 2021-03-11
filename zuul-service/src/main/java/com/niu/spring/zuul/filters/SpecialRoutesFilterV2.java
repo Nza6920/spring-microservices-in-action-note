@@ -19,6 +19,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 动态路由过滤器
@@ -81,7 +82,7 @@ public class SpecialRoutesFilterV2 extends ZuulFilter {
                     HttpMethod.GET,
                     null, ServerResponse.class, serviceName);
             ServerResponse body = restExchange.getBody();
-            abTestingRoute.optionProperties((Map<String, Object>) body.getData());
+            abTestingRoute.optionProperties((Map<String, Object>) Objects.requireNonNull(body).getData());
         } catch (HttpClientErrorException ex) {
             if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
                 return null;

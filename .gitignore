@@ -53,6 +53,10 @@ specialroutesservice.yml
 specialroutesservice-dev.yml
 specialroutesservice-prod.yml
 
+authenticationservice.yml
+authenticationservice-dev.yml
+authenticationservice-prod.yml
+
 /conf-service/src/main/resources/application.yml
 outside-service/src/test/
 sidecar-service/src/test/

@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: authenticationservice
+  profiles:
+    active: default
+  cloud:
+    # 配置管理服务地址
+    config:
+      uri: http://localhost:7017
