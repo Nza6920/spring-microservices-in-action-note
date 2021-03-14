@@ -2,6 +2,7 @@ package com.niu.spring.zuul.filters;
 
 import cn.hutool.core.util.StrUtil;
 import com.netflix.zuul.context.RequestContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,7 +19,6 @@ public class FilterUtil {
      * 请求头
      */
     public static final String CORRELATION_ID = "sys-correlation-id";
-    public static final String AUTH_TOKEN = "sys-auth-token";
     public static final String USER_ID = "sys-user-id";
     public static final String ORG_ID = "sys-org-id";
 
@@ -141,13 +141,13 @@ public class FilterUtil {
         RequestContext ctx = RequestContext.getCurrentContext();
 
         // 先获取 Http 请求头中是否包含
-        String token = ctx.getRequest().getHeader(AUTH_TOKEN);
+        String token = ctx.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
         if (StrUtil.isNotEmpty(token)) {
             return token;
         }
 
         // 再从 zuul 请求头中获取
-        return ctx.getZuulRequestHeaders().get(AUTH_TOKEN);
+        return ctx.getZuulRequestHeaders().get(HttpHeaders.AUTHORIZATION);
     }
 
     /**
@@ -159,7 +159,7 @@ public class FilterUtil {
      */
     public void setAuthToken(String authToken) {
         RequestContext ctx = RequestContext.getCurrentContext();
-        ctx.addZuulRequestHeader(AUTH_TOKEN, authToken);
+        ctx.addZuulRequestHeader(HttpHeaders.AUTHORIZATION, authToken);
     }
 
     /**

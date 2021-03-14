@@ -8,8 +8,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 /**
  * 资源服务配置类
  *
- * @version 1.0 [2021/03/12 17:21]
  * @author [nza]
+ * @version 1.0 [2021/03/12 17:21]
  * @createTime [2021/03/12 17:21]
  */
 @Configuration
@@ -19,7 +19,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         // 配置需要认证的请求
         http.authorizeRequests()
-                .antMatchers(HttpMethod.DELETE, "/v1/organizations/**")
+                .antMatchers(HttpMethod.DELETE, "/v2/organizations/**")
                 .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();

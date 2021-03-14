@@ -21,9 +21,11 @@ logging:
     org.springframework.web: WARN
     com.niu.spring.zuul: DEBUG
 
+# 配置网关
 zuul:
   host:
     connect-timeout-millis: 5000
+  sensitive-headers: Cookie,Set-Cookie
 
 #zuul:
 #  routes:

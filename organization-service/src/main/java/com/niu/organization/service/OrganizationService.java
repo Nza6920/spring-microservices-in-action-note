@@ -39,6 +39,17 @@ public class OrganizationService {
     }
 
     /**
+     * 删除机构
+     *
+     * @param organizationId 机构ID
+     * @author nza
+     * @createTime 2021/3/3 9:43
+     */
+    public void deleteOrganization(String organizationId) {
+        organizationRepository.deleteById(organizationId);
+    }
+
+    /**
      * 根据ID获取机构
      *
      * @param id 机构ID

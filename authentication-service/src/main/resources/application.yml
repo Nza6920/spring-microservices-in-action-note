@@ -22,4 +22,3 @@ logging:
     com.netflix: WARN
     org.springframework.web: WARN
     com.niu.spring.authentication: DEBUG
-

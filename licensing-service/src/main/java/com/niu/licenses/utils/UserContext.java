@@ -2,6 +2,7 @@ package com.niu.licenses.utils;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.http.HttpHeaders;
 
 /**
  * 用户上下文
@@ -15,9 +16,14 @@ import lombok.experimental.Accessors;
 public class UserContext {
 
     public static final String CORRELATION_ID = "sys-correlation-id";
-    public static final String AUTH_TOKEN = "sys-auth-token";
+    public static final String AUTH_TOKEN = HttpHeaders.AUTHORIZATION;
     public static final String USER_ID = "sys-user-id";
     public static final String ORG_ID = "sys-org-id";
+
+    /**
+     * HEADER
+     */
+    public static final String HEADER_AUTHORIZATION = "authorization";
 
     /**
      * 关联ID

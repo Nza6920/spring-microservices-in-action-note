@@ -20,6 +20,11 @@
     </properties>
 
     <dependencies>
+        <!-- jwt  -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+        </dependency>
         <!-- oauth -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

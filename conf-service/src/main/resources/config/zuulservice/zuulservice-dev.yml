@@ -15,3 +15,7 @@ zuul:
 management:
   endpoints:
     enabled-by-default: false
+
+jwt:
+  sign:
+    key: qwe123qw

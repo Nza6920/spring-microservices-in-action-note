@@ -1,4 +1,4 @@
-package com.niu.spring.routes.config;
+package com.niu.spring.zuul.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

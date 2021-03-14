@@ -5,6 +5,7 @@ import com.niu.organization.pojo.ServerResponse;
 import com.niu.organization.service.OrganizationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,8 @@ public class OrganizationServiceController {
      * @createTime 2021/3/3 17:21
      */
     @GetMapping("/{organizationId}")
-    public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId, HttpServletRequest request) {
+    public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId,
+                                                        Authentication authentication) {
         log.debug("机构服务 V1: getOrganization");
         return ServerResponse.createBySuccess(organizationService.findById(organizationId));
     }
@@ -50,6 +52,20 @@ public class OrganizationServiceController {
     @PostMapping()
     public ServerResponse<Object> saveOrganization(@RequestBody Organization org) {
         organizationService.saveOrganization(org);
+        return ServerResponse.createBySuccess();
+    }
+
+    /**
+     * 删除机构
+     *
+     * @param organizationId 机构ID
+     * @return {@link com.niu.organization.pojo.ServerResponse<com.niu.organization.model.Organization>}
+     * @author nza
+     * @createTime 2021/3/3 17:21
+     */
+    @DeleteMapping("/{organizationId}")
+    public ServerResponse<Object> deleteOrganization(@PathVariable String organizationId) {
+        organizationService.deleteOrganization(organizationId);
         return ServerResponse.createBySuccess();
     }
 

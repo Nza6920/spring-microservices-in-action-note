@@ -1,4 +1,4 @@
-package com.niu.spring.routes.config;
+package com.niu.spring.authentication.config;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +17,7 @@ public class ServiceConfig {
 
     @Value("${example.property}")
     private String exampleProperty;
+
 
     @Value("${jwt.sign.key}")
     private String jwtSignKey;

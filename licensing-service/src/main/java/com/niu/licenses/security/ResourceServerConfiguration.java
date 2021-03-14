@@ -1,9 +1,13 @@
-package com.niu.organization.security;
+package com.niu.licenses.security;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
 /**
  * 资源服务配置类
@@ -15,12 +19,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         // 配置需要认证的请求
         http.authorizeRequests()
-                .antMatchers(HttpMethod.DELETE, "/v1/organizations/**")
-                .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated();
     }

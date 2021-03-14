@@ -17,4 +17,7 @@ public class ServiceConfig {
 
     @Value("${example.property}")
     private String exampleProperty;
+
+    @Value("${jwt.sign.key}")
+    private String jwtSignKey;
 }

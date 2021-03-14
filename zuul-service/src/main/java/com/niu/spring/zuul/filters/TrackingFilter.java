@@ -1,12 +1,18 @@
 package com.niu.spring.zuul.filters;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.niu.spring.zuul.config.ServiceConfig;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * 前置过滤器
@@ -23,9 +29,31 @@ import org.springframework.stereotype.Component;
 public class TrackingFilter extends ZuulFilter {
 
     private final FilterUtil filterUtil;
+    private final ServiceConfig serviceConfig;
 
     private static final int FILTER_ORDER = 1;
     private static final boolean SHOULD_FILTER = true;
+
+    /**
+     * 获取机构ID
+     *
+     * @return {@link String} 机构ID
+     */
+    private String getOrganizationId() {
+        String result = StrUtil.EMPTY;
+        if (filterUtil.getAuthToken() != null) {
+            String authToken = filterUtil.getAuthToken().replace("Bearer ", "");
+            try {
+                Claims claims = Jwts.parser()
+                        .setSigningKey(serviceConfig.getJwtSignKey().getBytes(StandardCharsets.UTF_8))
+                        .parseClaimsJws(authToken).getBody();
+                result = (String) claims.get("organizationId");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
 
     /**
      * 告诉 Zuul 该过滤器的类型 (前置 | 路由 | 后置)
@@ -78,6 +106,8 @@ public class TrackingFilter extends ZuulFilter {
             filterUtil.setCorrelationId(generateCorrelationId());
             log.debug("TrackingFilter 已设置头部[{}]: {}", FilterUtil.CORRELATION_ID, filterUtil.getCorrelationId());
         }
+
+        log.info("机构ID: " + getOrganizationId());
 
         return null;
     }

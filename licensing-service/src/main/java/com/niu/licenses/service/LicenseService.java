@@ -141,7 +141,6 @@ public class LicenseService {
             @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "15000"),
             @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "5")
     },
-            fallbackMethod = "buildFallbackLicenseList",
             threadPoolKey = "licensesByOrg",
             threadPoolProperties = {
                     @HystrixProperty(name = "coreSize", value = "30"),

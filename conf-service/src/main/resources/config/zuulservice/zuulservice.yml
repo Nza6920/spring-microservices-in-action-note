@@ -41,3 +41,7 @@ licensingservice:
   ribbon:
     connectTimeout: 7000
     readTimeout: 7000
+
+jwt:
+  sign:
+    key: qwe123qw

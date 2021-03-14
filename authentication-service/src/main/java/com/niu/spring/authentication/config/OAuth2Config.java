@@ -19,7 +19,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
  * @version 1.0 [2021/03/12 09:38]
  * @createTime [2021/03/12 09:38]
  */
-@Configuration
+//@Configuration
 @Slf4j
 @AllArgsConstructor
 public class OAuth2Config extends AuthorizationServerConfigurerAdapter {

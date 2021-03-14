@@ -19,3 +19,9 @@ spring:
 management:
   endpoints:
     enabled-by-default: false
+
+# 配置 oauth
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:7024/auth/users/me

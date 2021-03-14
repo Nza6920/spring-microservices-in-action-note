@@ -1,11 +1,16 @@
 package com.niu.licenses.client;
 
+import cn.hutool.core.util.StrUtil;
 import com.niu.licenses.pojo.ServerResponse;
+import com.niu.licenses.utils.UserContextHolder;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.common.exceptions.UnauthorizedClientException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
 
 /**
  * 启用了 RestTemplate 的 Spring DiscoveryClient

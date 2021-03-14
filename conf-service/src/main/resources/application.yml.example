@@ -27,6 +27,7 @@ spring:
              - classpath:/config/sidecarservice
              - classpath:/config/specialroutesservice
              - classpath:/config/organizationservicev2
+             - classpath:/config/authenticationservice
 
 eureka:
   instance:
