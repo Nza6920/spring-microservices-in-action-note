@@ -4,12 +4,14 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
+import com.netflix.zuul.exception.ZuulException;
 import com.niu.spring.zuul.config.ServiceConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -42,15 +44,11 @@ public class TrackingFilter extends ZuulFilter {
     private String getOrganizationId() {
         String result = StrUtil.EMPTY;
         if (filterUtil.getAuthToken() != null) {
-            String authToken = filterUtil.getAuthToken().replace("Bearer ", "");
-            try {
-                Claims claims = Jwts.parser()
-                        .setSigningKey(serviceConfig.getJwtSignKey().getBytes(StandardCharsets.UTF_8))
-                        .parseClaimsJws(authToken).getBody();
-                result = (String) claims.get("organizationId");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            String authToken = filterUtil.getAuthTokenValue();
+            Claims claims = Jwts.parser()
+                    .setSigningKey(serviceConfig.getJwtSignKey().getBytes(StandardCharsets.UTF_8))
+                    .parseClaimsJws(authToken).getBody();
+            result = (String) claims.get("organizationId");
         }
         return result;
     }
@@ -94,7 +92,7 @@ public class TrackingFilter extends ZuulFilter {
      * @createTime 2021/3/8 22:40
      */
     @Override
-    public Object run() {
+    public Object run() throws ZuulException {
         RequestContext ctx = RequestContext.getCurrentContext();
         log.debug("TrackingFilter 处理请求: {}", ctx.getRequest().getRequestURI());
 
@@ -107,7 +105,12 @@ public class TrackingFilter extends ZuulFilter {
             log.debug("TrackingFilter 已设置头部[{}]: {}", FilterUtil.CORRELATION_ID, filterUtil.getCorrelationId());
         }
 
-        log.info("机构ID: " + getOrganizationId());
+        try {
+            String organizationId = getOrganizationId();
+            log.info("机构ID: {}", organizationId);
+        } catch (Exception e) {
+            throw new ZuulException(e, HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+        }
 
         return null;
     }

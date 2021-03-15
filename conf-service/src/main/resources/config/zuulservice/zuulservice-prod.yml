@@ -18,4 +18,4 @@ management:
 
 jwt:
   sign:
-    key: qwe123qw
+    key: qwe123qwe

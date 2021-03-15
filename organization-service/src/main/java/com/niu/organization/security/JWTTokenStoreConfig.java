@@ -30,8 +30,8 @@ public class JWTTokenStoreConfig {
         return new JwtTokenStore(jwtAccessTokenConverter());
     }
 
-    @Bean
-    @Primary
+//    @Bean
+//    @Primary
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenStore(tokenStore());
@@ -43,7 +43,7 @@ public class JWTTokenStoreConfig {
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        converter.setSigningKey("345345fsdfsf5345");
+        converter.setSigningKey(serviceConfig.getJwtSignKey());
         return converter;
     }
 }

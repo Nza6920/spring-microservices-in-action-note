@@ -135,8 +135,7 @@ public class SpecialRoutesFilter extends ZuulFilter {
 
             log.debug("触发动态路由, 地址: {}", route);
 
-            // todo: 这里必须把 动态路由标记设置为 true 来禁止 SimpleHostRoutingFilter 执行
-            // 否则会出现动态路由服务和非动态路由服务同时被调用的情况
+            // 设置动态路由标记
             filterUtil.setSpecialRouteFlag(true);
 
             // 转发请求

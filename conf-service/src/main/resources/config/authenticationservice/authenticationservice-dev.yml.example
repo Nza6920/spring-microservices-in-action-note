@@ -22,4 +22,7 @@ management:
       exposure:
         include: '*'
 
+jwt:
+  sign:
+    key: qwe123qwe
 

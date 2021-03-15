@@ -13,7 +13,7 @@
     <description>网关服务</description>
 
     <properties>
-        <start-class>com.niu.spring.zuul.Application</start-class>
+        <start-class>com.niu.spring.zuul.ZuulServiceApplication</start-class>
     </properties>
 
     <dependencies>

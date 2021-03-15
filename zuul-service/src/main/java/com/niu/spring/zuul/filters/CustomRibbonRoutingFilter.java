@@ -36,7 +36,7 @@ public class CustomRibbonRoutingFilter extends RibbonRoutingFilter {
 
         log.debug("自定义: CustomRibbonRoutingFilter");
 
-        // 判断动态路由标记, 若触发了动态路由则不执行此拦截器
+        // 判断动态路由标记, 若触发了动态路由则不执行此拦截器 (对SpecialRoutesFilterV2无效)
         Object specialRouteFlag = RequestContext.getCurrentContext().get(FilterUtil.SPECIAL_ROUTE_FLAG);
         if (specialRouteFlag == null) {
             return super.shouldFilter();
@@ -47,11 +47,16 @@ public class CustomRibbonRoutingFilter extends RibbonRoutingFilter {
 
     @Override
     protected RibbonCommandContext buildCommandContext(RequestContext context) {
+
+        log.debug("自定义: buildCommandContext");
+
         RibbonCommandContext ribbonCommandContext = super.buildCommandContext(context);
 
         AbTestingRoute abTestingRoute = (AbTestingRoute) context.get(AB_TESTING_ROUTE);
         if (abTestingRoute != null) {
             String uri = ribbonCommandContext.getUri();
+
+            // 替换版本
             String newUri = StrUtil.replace(uri, MessageFormat.format(VERSION_PATTERN, abTestingRoute.getCurrentVersion()), MessageFormat.format(VERSION_PATTERN, abTestingRoute.getTargetVersion()));
             return new RibbonCommandContext(abTestingRoute.getTargetServiceName(),
                     ribbonCommandContext.getMethod(),

@@ -27,3 +27,7 @@ security:
   oauth2:
     resource:
       user-info-uri: http://localhost:7024/auth/users/me
+
+jwt:
+  sign:
+    key: qwe123qwe

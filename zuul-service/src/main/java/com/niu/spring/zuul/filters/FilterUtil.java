@@ -151,6 +151,17 @@ public class FilterUtil {
     }
 
     /**
+     * 获取授权 token （去除 Bearer ）
+     *
+     * @return {@link java.lang.String}
+     * @author nza
+     * @createTime 2021/3/8 22:24
+     */
+    public String getAuthTokenValue() {
+        return this.getAuthToken().replace("Bearer ", StrUtil.EMPTY);
+    }
+
+    /**
      * 设置授权 token
      *
      * @param authToken 授权 token

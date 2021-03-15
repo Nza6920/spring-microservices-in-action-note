@@ -13,6 +13,12 @@
     <description>路由检索服务</description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -63,6 +69,6 @@
     </dependencies>
 
     <properties>
-        <start-class>com.niu.spring.routes.Application</start-class>
+        <start-class>com.niu.spring.routes.SpecialRoutesServiceApplication</start-class>
     </properties>
 </project>

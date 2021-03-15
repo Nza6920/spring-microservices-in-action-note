@@ -23,6 +23,7 @@ public class HomeController {
     public Map<String, Object> home() {
         HashMap<String, Object> res = Maps.newHashMap();
         res.put("msg", "success");
+        res.put("data", "我是外部服务");
         res.put("status", 1);
         return res;
     }

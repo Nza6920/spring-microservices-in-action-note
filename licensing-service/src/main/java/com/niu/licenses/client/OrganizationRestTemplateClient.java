@@ -1,16 +1,11 @@
 package com.niu.licenses.client;
 
-import cn.hutool.core.util.StrUtil;
 import com.niu.licenses.pojo.ServerResponse;
-import com.niu.licenses.utils.UserContextHolder;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.common.exceptions.UnauthorizedClientException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
 
 /**
  * 启用了 RestTemplate 的 Spring DiscoveryClient
@@ -36,7 +31,10 @@ public class OrganizationRestTemplateClient {
     public Object getOrganization(String organizationId) {
 
         // 使用服务名称传递
-        String uri = "http://organizationservice/v1/organizations/{organizationId}";
+//        String uri = "http://organizationservice/v1/organizations/{organizationId}";
+
+        // 使用网关传递
+        String uri = "http://zuulservice/api/organizationservice/v1/organizations/{organizationId}";
         ResponseEntity<ServerResponse> restExchange = restTemplate.exchange(uri, HttpMethod.GET, null, ServerResponse.class, organizationId);
 
         ServerResponse body = restExchange.getBody();
@@ -53,7 +51,10 @@ public class OrganizationRestTemplateClient {
     public Object findAllOrganization() {
 
         // 使用服务名称传递
-        String uri = "http://organizationservice/v1/organizations";
+//        String uri = "http://organizationservice/v1/organizations";
+
+        // 使用网关传递
+        String uri = "http://zuulservice/api/organizationservice/v1/organizations";
         ResponseEntity<ServerResponse> restExchange = restTemplate.exchange(uri, HttpMethod.GET, null, ServerResponse.class);
 
         ServerResponse body = restExchange.getBody();

@@ -14,7 +14,7 @@
     <version>1.0.0</version>
     <description>配置管理服务</description>
     <properties>
-        <start-class>com.niu.spring.conf.Application</start-class>
+        <start-class>com.niu.spring.conf.ConfServiceApplication</start-class>
     </properties>
 
     <dependencies>

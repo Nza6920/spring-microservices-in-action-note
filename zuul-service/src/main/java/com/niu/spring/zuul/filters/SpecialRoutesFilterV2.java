@@ -21,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.niu.spring.zuul.filters.FilterUtil.AB_TESTING_ROUTE;
+
 /**
  * 动态路由过滤器
  * 参考 {@link SimpleHostRoutingFilter}
@@ -106,7 +108,9 @@ public class SpecialRoutesFilterV2 extends ZuulFilter {
                 return null;
             }
             log.debug("触发动态路由V2, 地址: organizationservicev2");
-            ctx.set("abTestingRoute", abTestingRoute);
+            ctx.set(AB_TESTING_ROUTE, abTestingRoute);
+        } else {
+            ctx.set(AB_TESTING_ROUTE, null);
         }
 
         return null;

@@ -27,13 +27,13 @@ public class UserContextInterceptor implements ClientHttpRequestInterceptor {
 
         RequestContext ctx = RequestContext.getCurrentContext();
         String correlationId = ctx.getRequest().getHeader(FilterUtil.CORRELATION_ID);
-//        String authToken = ctx.getRequest().getHeader(FilterUtil.AUTH_TOKEN);
+        String authToken = ctx.getRequest().getHeader(HttpHeaders.AUTHORIZATION);
 
         log.debug("UserContextInterceptor 请求拦截器");
 
         HttpHeaders headers = req.getHeaders();
         headers.add(FilterUtil.CORRELATION_ID, correlationId);
-//        headers.add(FilterUtil.AUTH_TOKEN, authToken);
+        headers.add(HttpHeaders.AUTHORIZATION, authToken);
 
         return execution.execute(req, bytes);
     }

@@ -20,9 +20,10 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @EnableEurekaClient
 @EnableAuthorizationServer
 @EnableResourceServer
-public class AuthenticationApplication {
+public class AuthenticationServiceApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run (AuthenticationApplication.class, args);
+        SpringApplication.run (AuthenticationServiceApplication.class, args);
     }
 
     @Bean
