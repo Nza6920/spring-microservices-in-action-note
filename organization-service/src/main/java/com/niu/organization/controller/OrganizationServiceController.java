@@ -35,8 +35,7 @@ public class OrganizationServiceController {
      * @createTime 2021/3/3 17:21
      */
     @GetMapping("/{organizationId}")
-    public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId,
-                                                        Authentication authentication) {
+    public ServerResponse<Organization> getOrganization(@PathVariable("organizationId") String organizationId) {
         log.debug("机构服务 V1: getOrganization");
         return ServerResponse.createBySuccess(organizationService.findById(organizationId));
     }

@@ -1,10 +1,9 @@
 package com.niu.organization.service;
 
-import cn.hutool.core.util.IdUtil;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.niu.organization.model.Organization;
 import com.niu.organization.repository.OrganizationRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,22 +20,6 @@ import java.util.Optional;
 public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
-
-    /**
-     * 保存机构
-     *
-     * @param organization 机构实体
-     * @return {@link String} 新增的机构ID
-     * @author nza
-     * @createTime 2021/3/3 9:43
-     */
-    public String saveOrganization(Organization organization) {
-
-        organization.setId(IdUtil.simpleUUID());
-        Organization newOrg = organizationRepository.save(organization);
-
-        return newOrg.getId();
-    }
 
     /**
      * 根据ID获取机构

@@ -20,3 +20,21 @@ logging:
     com.netflix: WARN
     org.springframework.web: WARN
     com.niu: DEBUG
+
+# 配置 spring cloud stream
+spring:
+  cloud:
+    stream:
+      bindings:
+        # 通道名称, 对于 source.output() 的通道
+        output:
+          # 推送的主题名称
+          destination:  orgChangeTopic
+          # 数据的类型
+          content-type: application/json
+      # 消息总线的类型
+      kafka:
+        binder:
+          # 配置 zookeeper 的网络地址
+          zkNodes: localhost
+          brokers: localhost

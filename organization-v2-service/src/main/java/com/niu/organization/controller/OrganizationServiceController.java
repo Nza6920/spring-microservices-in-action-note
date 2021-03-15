@@ -47,20 +47,6 @@ public class OrganizationServiceController {
     /**
      * 新增机构
      *
-     * @param org 机构实体
-     * @return {@link ServerResponse < Organization >}
-     * @author nza
-     * @createTime 2021/3/3 17:21
-     */
-    @PostMapping()
-    public ServerResponse<Object> saveOrganization(@RequestBody Organization org) {
-        organizationService.saveOrganization(org);
-        return ServerResponse.createBySuccess();
-    }
-
-    /**
-     * 新增机构
-     *
      * @return {@link ServerResponse < Organization >}
      * @author nza
      * @createTime 2021/3/3 17:21

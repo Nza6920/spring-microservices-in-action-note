@@ -1,6 +1,8 @@
 package com.niu.organization.service;
 
 import cn.hutool.core.util.IdUtil;
+import com.niu.organization.enums.MessageTypeEnums;
+import com.niu.organization.events.source.SimpleSourceBean;
 import com.niu.organization.model.Organization;
 import com.niu.organization.repository.OrganizationRepository;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,8 @@ public class OrganizationService {
 
     private final OrganizationRepository organizationRepository;
 
+    private final SimpleSourceBean simpleSourceBean;
+
     /**
      * 保存机构
      *
@@ -35,6 +39,8 @@ public class OrganizationService {
         organization.setId(IdUtil.simpleUUID());
         Organization newOrg = organizationRepository.save(organization);
 
+        simpleSourceBean.publishOrgChange(MessageTypeEnums.SAVE.getValue(), organization.getId());
+        
         return newOrg.getId();
     }
 

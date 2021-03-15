@@ -43,7 +43,6 @@ public class SpecialRoutesFilterV2 extends ZuulFilter {
 
     private final RestTemplate restTemplate;
 
-
     /**
      * 动态路由过滤器
      *
