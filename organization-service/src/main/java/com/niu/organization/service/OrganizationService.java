@@ -40,7 +40,7 @@ public class OrganizationService {
         Organization newOrg = organizationRepository.save(organization);
 
         simpleSourceBean.publishOrgChange(MessageTypeEnums.SAVE.getValue(), organization.getId());
-        
+
         return newOrg.getId();
     }
 

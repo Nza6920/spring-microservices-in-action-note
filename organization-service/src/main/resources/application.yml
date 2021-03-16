@@ -32,9 +32,9 @@ spring:
           destination:  orgChangeTopic
           # 数据的类型
           content-type: application/json
-      # 消息总线的类型
+        # 消息总线的类型
       kafka:
         binder:
           # 配置 zookeeper 的网络地址
-          zkNodes: localhost
-          brokers: localhost
+          zkNodes: localhost:2181
+          brokers: localhost:9092
