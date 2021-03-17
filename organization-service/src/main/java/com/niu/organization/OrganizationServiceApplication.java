@@ -20,7 +20,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 @SpringBootApplication
 @EnableEurekaClient
 @EnableResourceServer
-@EnableBinding({ Source.class })
 public class OrganizationServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrganizationServiceApplication.class, args);

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 机构
@@ -16,7 +17,7 @@ import javax.persistence.Table;
  */
 @Data
 @Accessors(chain = true)
-public class Organization {
+public class Organization implements Serializable {
 
     /**
      * ID

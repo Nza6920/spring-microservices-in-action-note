@@ -1,4 +1,4 @@
-package com.niu.organization.events.model;
+package com.niu.licenses.events.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.niu.organization.enums;
+package com.niu.licenses.enums;
 
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import lombok.Getter;
  * @createTime [2021/03/15 17:43]
  */
 @Getter
-public enum  MessageTypeEnums {
+public enum MessageTypeEnums {
 
     /**
      * 枚举值

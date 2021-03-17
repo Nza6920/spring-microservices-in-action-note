@@ -98,7 +98,13 @@ public class SpecialRoutesFilterV2 extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         log.debug("SpecialRoutesFilter 处理请求响应: {}, 关联ID: {}", ctx.getRequest().getRequestURI(), filterUtil.getCorrelationId());
 
-        AbTestingRoute abTestingRoute = getAbRoutingInfo(filterUtil.getServiceId());
+        String method = ctx.getRequest().getMethod();
+
+        AbTestingRoute abTestingRoute = null;
+        // 只处理 GET 请求
+        if (StrUtil.equals(method, "GET")) {
+            abTestingRoute = getAbRoutingInfo(filterUtil.getServiceId());
+        }
 
         if (abTestingRoute != null && useSpecialRoute(abTestingRoute)) {
 

@@ -14,6 +14,39 @@ spring:
     properties.hibernate.dialect: "org.hibernate.dialect.MySQL8Dialect"
     open-in-view: "false"
     show-sql: "true"
+  # 配置 redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 3000
+    database: 1
+    lettuce:
+      pool:
+        max-wait: 16
+        max-active: 16
+        max-idle: 16
+        min-idle: 1
+      # 关闭超时时间
+      shutdown-timeout: 10000ms
+  # 配置 mq
+  rabbitmq:
+    password:
+    username:
+    addresses:
+    port: 5672
+  # 配置 spring cloud stream
+  cloud:
+    stream:
+      bindings:
+        # 通道名称, 对于 source.input() 的通道
+        # input 默认的
+        inboundOrgChanges:
+          # 接受的隧道主题
+          destination:  orgChangeTopic
+          # 数据的类型
+          content-type: application/json
+          # 定义消费组名称，消息只会被该消费组中的一个实例消费
+          group: licensingGroup
 
 # 配置 actuator
 management:

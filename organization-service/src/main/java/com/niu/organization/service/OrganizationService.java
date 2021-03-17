@@ -39,6 +39,7 @@ public class OrganizationService {
         organization.setId(IdUtil.simpleUUID());
         Organization newOrg = organizationRepository.save(organization);
 
+        // 发布消息 通知消费者数据发生了变化
         simpleSourceBean.publishOrgChange(MessageTypeEnums.SAVE.getValue(), organization.getId());
 
         return newOrg.getId();
@@ -53,6 +54,9 @@ public class OrganizationService {
      */
     public void deleteOrganization(String organizationId) {
         organizationRepository.deleteById(organizationId);
+
+        // 发布消息 通知消费者数据发生了变化
+        simpleSourceBean.publishOrgChange(MessageTypeEnums.DELETE.getValue(), organizationId);
     }
 
     /**

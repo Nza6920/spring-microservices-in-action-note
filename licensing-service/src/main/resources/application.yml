@@ -33,8 +33,11 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+
 # 配置oauth
 security:
   oauth2:
     resource:
       user-info-uri: http://localhost:7024/auth/users/me
+
+

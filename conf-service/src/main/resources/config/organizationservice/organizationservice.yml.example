@@ -14,6 +14,28 @@ spring:
     properties.hibernate.dialect: "org.hibernate.dialect.MySQL8Dialect"
     open-in-view: "false"
     show-sql: "true"
+   # 配置mq
+  rabbitmq:
+      password:
+      username:
+      addresses:
+      port: 5672
+    # 配置 spring cloud stream
+  cloud:
+      stream:
+        rabbit:
+          bindings:
+            packetUplinkInput:
+              consumer:
+                republishToDlq: false
+        bindings:
+          # 通道名称, 对于 source.output() 的通道
+          #   output:
+          outputBound:
+            # 推送的主题名称
+            destination:  orgChangeTopic
+            # 数据的类型
+            content-type: application/json
 
 
 # 配置 actuator
