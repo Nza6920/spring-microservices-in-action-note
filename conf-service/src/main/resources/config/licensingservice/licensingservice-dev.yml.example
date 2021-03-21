@@ -47,6 +47,9 @@ spring:
           content-type: application/json
           # 定义消费组名称，消息只会被该消费组中的一个实例消费
           group: licensingGroup
+  zipkin:
+    base-url: http://127.0.0.1:7025
+
 
 # 配置 actuator
 management:

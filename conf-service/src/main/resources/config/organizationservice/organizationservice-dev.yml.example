@@ -36,6 +36,8 @@ spring:
             destination:  orgChangeTopic
             # 数据的类型
             content-type: application/json
+  zipkin:
+    base-url: http://127.0.0.1:7025
 
 # 配置 actuator
 management:
