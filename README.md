@@ -1,5 +1,5 @@
 # spring-microservices-in-action-note
-> #### spring microservices in action 书中的项目案例, 使用 spring-cloud(Hoxton.SR10) 版本进行重构, 删减了 Docker 相关的内容, 并对一些细节功能实现做了调整. 
+> #### spring microservices in action 书中的项目案例, 使用 spring-cloud(Hoxton.SR10) 版本进行重构, 删减了 Docker 相关的内容, 并对一些功能实现的细节做了调整.
 > #### 项目结构图: /src/main/resources/结构图.png
 
 # 项目启动说明
