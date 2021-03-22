@@ -1,0 +1,1096 @@
+{
+	"info": {
+		"_postman_id": "7d2c9f6a-78ea-4f03-b733-1f56e7aa7c56",
+		"name": "springMicroservicesInAction",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "许可证服务",
+			"item": [
+				{
+					"name": "获取许可证",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "sys-correlation-id",
+								"value": "fuck",
+								"type": "text"
+							},
+							{
+								"key": "sys-auth-token",
+								"value": "19980513",
+								"type": "text"
+							},
+							{
+								"key": "sys-user-id",
+								"value": "admin",
+								"type": "text"
+							},
+							{
+								"key": "sys-org-id",
+								"value": "cd3d65167be749b08a9fe36f9079a1c1",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host-licenses}}/v1/organizations/:organizationId/licenses/:licensesId/:clientType",
+							"host": [
+								"{{host-licenses}}"
+							],
+							"path": [
+								"v1",
+								"organizations",
+								":organizationId",
+								"licenses",
+								":licensesId",
+								":clientType"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "cd3d65167be749b08a9fe36f9079a1c1",
+									"description": "机构ID"
+								},
+								{
+									"key": "licensesId",
+									"value": "225510f35e884fefbd28bfbccdda8c72",
+									"description": "许可证ID"
+								},
+								{
+									"key": "clientType",
+									"value": "rest",
+									"description": "feign | rest | discovery"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "健康信息",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-licenses}}/actuator",
+							"host": [
+								"{{host-licenses}}"
+							],
+							"path": [
+								"actuator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取机构下所有许可",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "sys-correlation-id",
+								"value": "fuck",
+								"type": "text"
+							},
+							{
+								"key": "sys-auth-token",
+								"value": "19980513",
+								"type": "text"
+							},
+							{
+								"key": "sys-user-id",
+								"value": "admin",
+								"type": "text"
+							},
+							{
+								"key": "sys-org-id",
+								"value": "057a597b70954b00878344507e16caec",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host-licenses}}/v1/organizations/:organizationId/licenses/:clientType",
+							"host": [
+								"{{host-licenses}}"
+							],
+							"path": [
+								"v1",
+								"organizations",
+								":organizationId",
+								"licenses",
+								":clientType"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "057a597b70954b00878344507e16caec",
+									"description": "机构ID"
+								},
+								{
+									"key": "clientType",
+									"value": "rest",
+									"description": "feign | rest | discovery"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "调用外部服务",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-licenses}}/v1/outsides",
+							"host": [
+								"{{host-licenses}}"
+							],
+							"path": [
+								"v1",
+								"outsides"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取机构下所有许可证(网关)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/api/licensingservice/v1/organizations/:organizationId/licenses/:clientType",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"licensingservice",
+								"v1",
+								"organizations",
+								":organizationId",
+								"licenses",
+								":clientType"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "057a597b70954b00878344507e16caec",
+									"description": "机构ID"
+								},
+								{
+									"key": "clientType",
+									"value": "rest",
+									"description": "feign | rest | discovery"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取许可证(网关)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/api/licensingservice/v1/organizations/:organizationId/licenses/:licensesId/:clientType",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"licensingservice",
+								"v1",
+								"organizations",
+								":organizationId",
+								"licenses",
+								":licensesId",
+								":clientType"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "2e7f9377c0294a85b40468204885f8de",
+									"description": "机构ID"
+								},
+								{
+									"key": "licensesId",
+									"value": "91476509e80b46abb3cfa3f09220988c",
+									"description": "许可证ID"
+								},
+								{
+									"key": "clientType",
+									"value": "rest",
+									"description": "feign | rest | discovery"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "调用外部服务(网关)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/api/licensingservice/v1/outsides",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"licensingservice",
+								"v1",
+								"outsides"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "配置管理服务",
+			"item": [
+				{
+					"name": "许可证配置",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-conf}}/licensingservice/:env",
+							"host": [
+								"{{host-conf}}"
+							],
+							"path": [
+								"licensingservice",
+								":env"
+							],
+							"variable": [
+								{
+									"key": "env",
+									"value": "default",
+									"description": "环境: default | dev | prod"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "机构配置",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-conf}}/organizationservice/:env",
+							"host": [
+								"{{host-conf}}"
+							],
+							"path": [
+								"organizationservice",
+								":env"
+							],
+							"variable": [
+								{
+									"key": "env",
+									"value": "default",
+									"description": "环境: default | dev | prod"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "机构配置v2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-conf}}/organizationservicev2/:env",
+							"host": [
+								"{{host-conf}}"
+							],
+							"path": [
+								"organizationservicev2",
+								":env"
+							],
+							"variable": [
+								{
+									"key": "env",
+									"value": "default",
+									"description": "环境: default | dev | prod"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "外部调用服务配置",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-conf}}/sidecarservice/:env",
+							"host": [
+								"{{host-conf}}"
+							],
+							"path": [
+								"sidecarservice",
+								":env"
+							],
+							"variable": [
+								{
+									"key": "env",
+									"value": "default",
+									"description": "环境: default | dev | prod"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "路由检索服务",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-conf}}/specialroutesservice/:env",
+							"host": [
+								"{{host-conf}}"
+							],
+							"path": [
+								"specialroutesservice",
+								":env"
+							],
+							"variable": [
+								{
+									"key": "env",
+									"value": "default",
+									"description": "环境: default | dev | prod"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "网关服务配置",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-conf}}/zuulservice/:env",
+							"host": [
+								"{{host-conf}}"
+							],
+							"path": [
+								"zuulservice",
+								":env"
+							],
+							"variable": [
+								{
+									"key": "env",
+									"value": "default",
+									"description": "环境: default | dev | prod"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "注册中心服务",
+			"item": [
+				{
+					"name": "已注册的服务",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host-eureka}}/eureka/apps/:appId",
+							"host": [
+								"{{host-eureka}}"
+							],
+							"path": [
+								"eureka",
+								"apps",
+								":appId"
+							],
+							"variable": [
+								{
+									"key": "appId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "机构服务",
+			"item": [
+				{
+					"name": "机构列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-organization}}/v1/organizations",
+							"host": [
+								"{{host-organization}}"
+							],
+							"path": [
+								"v1",
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取机构",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-organization}}/v1/organizations/:organizationId",
+							"host": [
+								"{{host-organization}}"
+							],
+							"path": [
+								"v1",
+								"organizations",
+								":organizationId"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "057a597b70954b00878344507e16caec",
+									"description": "机构ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "机构列表(网关)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/api/organizationservice/v1/organizations",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"organizationservice",
+								"v1",
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取机构（网关）",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/api/organizationservice/v1/organizations/:organizationId",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"organizationservice",
+								"v1",
+								"organizations",
+								":organizationId"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "057a597b70954b00878344507e16caec",
+									"description": "机构ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除机构",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ad51798b-b23d-4a1e-a581-db058b123995",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host-organization}}/v1/organizations/:organizationId",
+							"host": [
+								"{{host-organization}}"
+							],
+							"path": [
+								"v1",
+								"organizations",
+								":organizationId"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "381d9fbccbb04510b953ff42286d747b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增机构",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"小西牛乳业\",\r\n    \"contactName\": \"李先生\",\r\n    \"contactEmail\": \"123@xiaoxiniu.com\",\r\n    \"contactPhone\": \"19988778899\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-organization}}/v1/organizations/",
+							"host": [
+								"{{host-organization}}"
+							],
+							"path": [
+								"v1",
+								"organizations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增机构(网关)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"小西牛乳业24\",\r\n    \"contactName\": \"李先生24\",\r\n    \"contactEmail\": \"1223@xiaoxiniu.com\",\r\n    \"contactPhone\": \"19988778229\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host-zuul}}/api/organizationservice/v1/organizations/",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"organizationservice",
+								"v1",
+								"organizations",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "机构服务v2",
+			"item": [
+				{
+					"name": "机构列表",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbml6YXRpb25JZCI6InVzZXIxIiwidXNlcl9uYW1lIjoidXNlcjEiLCJzY29wZSI6WyJ3ZWJjbGllbnQiXSwiZXhwIjoxNjE1ODE4MDQxLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiYTE5Njk2YmEtZDE3ZC00NTA2LWJiNzgtOWVmMjk0ZTlkZWI2IiwiY2xpZW50X2lkIjoiY2xpZW50LTEifQ.LT1ceoG1Jf7yl7ssUhIDpcZY6F0kzQiS38VLIGiY5oc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-organization-v2}}/v2/organizations",
+							"host": [
+								"{{host-organization-v2}}"
+							],
+							"path": [
+								"v2",
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取机构",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbml6YXRpb25JZCI6InVzZXIxIiwidXNlcl9uYW1lIjoidXNlcjEiLCJzY29wZSI6WyJ3ZWJjbGllbnQiXSwiZXhwIjoxNjE1NzU3NjgyLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNzk3ZGE0OTAtNWEyZi00MTllLWJhNmEtMzE3MDA1NmFjOGQxIiwiY2xpZW50X2lkIjoiY2xpZW50LTEifQ._6pslGwHigT9gwhLCvwWbB7pc8pc5_JOwwDZ9QDsWVM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-organization-v2}}/v2/organizations/:organizationI",
+							"host": [
+								"{{host-organization-v2}}"
+							],
+							"path": [
+								"v2",
+								"organizations",
+								":organizationI"
+							],
+							"variable": [
+								{
+									"key": "organizationI",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "机构列表(网关)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/api/organizationservicev2/v2/organizations",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"organizationservicev2",
+								"v2",
+								"organizations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取机构（网关）",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/api/organizationservicev2/v2/organizations/:organizationId",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"api",
+								"organizationservicev2",
+								"v2",
+								"organizations",
+								":organizationId"
+							],
+							"variable": [
+								{
+									"key": "organizationId",
+									"value": "057a597b70954b00878344507e16caec",
+									"description": "机构ID"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "网关服务",
+			"item": [
+				{
+					"name": "网关路由列表",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-zuul}}/actuator/routes",
+							"host": [
+								"{{host-zuul}}"
+							],
+							"path": [
+								"actuator",
+								"routes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "外部服务",
+			"item": [
+				{
+					"name": "外部服务接口",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-outside}}/outside/home",
+							"host": [
+								"{{host-outside}}"
+							],
+							"path": [
+								"outside",
+								"home"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "路由检索服务",
+			"item": [
+				{
+					"name": "检索路由信息",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-route}}/v1/routes/abtestings/:serviceName",
+							"host": [
+								"{{host-route}}"
+							],
+							"path": [
+								"v1",
+								"routes",
+								"abtestings",
+								":serviceName"
+							],
+							"variable": [
+								{
+									"key": "serviceName",
+									"value": "organizationservice",
+									"description": "服务名称"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "授权服务",
+			"item": [
+				{
+					"name": "授权服务",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "secret",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "client-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "webclient",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "user1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "secret",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host-authentication}}/auth/oauth/token",
+							"host": [
+								"{{host-authentication}}"
+							],
+							"path": [
+								"auth",
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户服务",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host-authentication}}/auth/users/me",
+							"host": [
+								"{{host-authentication}}"
+							],
+							"path": [
+								"auth",
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "刷新token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "secret",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "client-1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refresh_token}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "user1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "secret",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host-authentication}}/auth/oauth/token",
+							"host": [
+								"{{host-authentication}}"
+							],
+							"path": [
+								"auth",
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

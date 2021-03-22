@@ -47,6 +47,9 @@ spring:
             content-type: application/json
             # 定义消费组名称，消息只会被该消费组中的一个实例消费
             group: licensingGroup
+    zipkin:
+      sender:
+        type: rabbit
 
 # 配置 actuator
 management:
