@@ -18,9 +18,9 @@ public interface AbTestingRepository extends CrudRepository<AbTestingRoute, Stri
      * 根据服务名称查询
      *
      * @param serviceName 服务名
+     * @return {@link com.niu.spring.routes.model.AbTestingRoute}
      * @author nza
      * @createTime 2021/3/9 14:42
-     * @return    {@link com.niu.spring.routes.model.AbTestingRoute}
      */
     AbTestingRoute findByServiceName(String serviceName);
 }

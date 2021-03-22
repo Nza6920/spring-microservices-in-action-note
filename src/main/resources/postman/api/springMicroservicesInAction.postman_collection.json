@@ -81,6 +81,16 @@
 				{
 					"name": "健康信息",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -98,6 +108,16 @@
 				{
 					"name": "获取机构下所有许可",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -152,6 +172,16 @@
 				{
 					"name": "调用外部服务",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -747,7 +777,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbml6YXRpb25JZCI6InVzZXIxIiwidXNlcl9uYW1lIjoidXNlcjEiLCJzY29wZSI6WyJ3ZWJjbGllbnQiXSwiZXhwIjoxNjE1ODE4MDQxLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiYTE5Njk2YmEtZDE3ZC00NTA2LWJiNzgtOWVmMjk0ZTlkZWI2IiwiY2xpZW50X2lkIjoiY2xpZW50LTEifQ.LT1ceoG1Jf7yl7ssUhIDpcZY6F0kzQiS38VLIGiY5oc",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -775,7 +805,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmdhbml6YXRpb25JZCI6InVzZXIxIiwidXNlcl9uYW1lIjoidXNlcjEiLCJzY29wZSI6WyJ3ZWJjbGllbnQiXSwiZXhwIjoxNjE1NzU3NjgyLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNzk3ZGE0OTAtNWEyZi00MTllLWJhNmEtMzE3MDA1NmFjOGQxIiwiY2xpZW50X2lkIjoiY2xpZW50LTEifQ._6pslGwHigT9gwhLCvwWbB7pc8pc5_JOwwDZ9QDsWVM",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -805,6 +835,16 @@
 				{
 					"name": "机构列表(网关)",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -825,6 +865,16 @@
 				{
 					"name": "获取机构（网关）",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {

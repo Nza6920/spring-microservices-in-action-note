@@ -3,6 +3,7 @@ package com.niu.spring.routes.config;
 import com.niu.spring.routes.utils.UserContext;
 import com.niu.spring.routes.utils.UserContextHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +26,7 @@ public class CustomInterceptor implements HandlerInterceptor {
 
         // 设置当前线程上下文
         UserContextHolder.getContext().setCorrelationId(req.getHeader(UserContext.CORRELATION_ID));
-        UserContextHolder.getContext().setUserId(req.getHeader(UserContext.USER_ID));
-        UserContextHolder.getContext().setAuthToken(req.getHeader(UserContext.AUTH_TOKEN));
-        UserContextHolder.getContext().setOrgId(req.getHeader(UserContext.ORG_ID));
+        UserContextHolder.getContext().setAuthToken(req.getHeader(HttpHeaders.AUTHORIZATION));
 
         log.debug("自定义请求拦截器 Correlation ID: {}", UserContextHolder.getContext().getCorrelationId());
 

@@ -22,7 +22,7 @@ public class UserContextInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest req, byte[] bytes, ClientHttpRequestExecution execution) throws IOException {
         HttpHeaders headers = req.getHeaders();
         headers.add(UserContext.CORRELATION_ID, UserContextHolder.getContext().getCorrelationId());
-        headers.add(UserContext.AUTH_TOKEN, UserContextHolder.getContext().getAuthToken());
+        headers.add(HttpHeaders.AUTHORIZATION, UserContextHolder.getContext().getAuthToken());
 
         return execution.execute(req, bytes);
     }

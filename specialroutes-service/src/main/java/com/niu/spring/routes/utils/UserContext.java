@@ -15,9 +15,6 @@ import lombok.experimental.Accessors;
 public class UserContext {
 
     public static final String CORRELATION_ID = "sys-correlation-id";
-    public static final String AUTH_TOKEN = "sys-auth-token";
-    public static final String USER_ID = "sys-user-id";
-    public static final String ORG_ID = "sys-org-id";
 
     /**
      * 关联ID
@@ -28,14 +25,4 @@ public class UserContext {
      * token
      */
     private String authToken = "";
-
-    /**
-     * 用户ID
-     */
-    private String userId = "";
-
-    /**
-     * 机构ID
-     */
-    private String orgId = "";
 }

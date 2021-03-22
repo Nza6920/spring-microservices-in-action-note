@@ -16,8 +16,8 @@ import org.springframework.cloud.netflix.sidecar.EnableSidecar;
 @SpringBootApplication
 @EnableSidecar
 @EnableEurekaClient
-public class Application {
+public class SidecarApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(SidecarApplication.class, args);
     }
 }

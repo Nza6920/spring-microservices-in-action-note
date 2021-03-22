@@ -19,7 +19,6 @@
         <module>specialroutes-service</module>
         <module>organization-v2-service</module>
         <module>authentication-service</module>
-        <module>zipkin-service</module>
     </modules>
 
     <properties>
@@ -33,7 +32,6 @@
         <postgresql.version>42.2.19</postgresql.version>
         <security.jwt.version>1.1.1.RELEASE</security.jwt.version>
         <commons.pool2.version>2.9.0</commons.pool2.version>
-        <zipkin.version>2.12.9</zipkin.version>
     </properties>
 
     <dependencies>

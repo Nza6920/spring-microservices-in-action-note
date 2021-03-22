@@ -11,8 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @createTime [2021/03/08 16:50]
  */
 @SpringBootApplication
-public class Application {
+public class OutsideApplication {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(OutsideApplication.class, args);
     }
 }
