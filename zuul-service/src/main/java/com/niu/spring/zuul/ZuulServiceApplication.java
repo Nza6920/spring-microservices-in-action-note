@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 @EnableZuulProxy
 @EnableEurekaClient
 public class ZuulServiceApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(ZuulServiceApplication.class, args);
     }

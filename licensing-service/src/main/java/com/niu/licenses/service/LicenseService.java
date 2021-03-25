@@ -95,18 +95,13 @@ public class LicenseService {
             })
     public License getLicense(String organizationId, String licenseId, String clientType) {
 
-        try {
-            log.debug("Service[获取许可] Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
+        log.debug("Service[获取许可] Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
 
-            License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
+        License license = licenseRepository.findByOrganizationIdAndId(organizationId, licenseId);
 
-            Object org = retrieveOrgInfo(organizationId, clientType);
+        Object org = retrieveOrgInfo(organizationId, clientType);
 
-            return license.setOrganization(org);
-        } finally {
-            log.debug("删除 Hystrix 线程本地变量...");
-            UserContextHolder.remove();
-        }
+        return license.setOrganization(org);
     }
 
     private License buildFallbackLicense(String organizationId, String licenseId, String clientType) {
@@ -148,25 +143,20 @@ public class LicenseService {
             })
     public List<License> getLicensesByOrg(String organizationId, String clientType) {
 
-        try {
-            log.debug("Service[查询组织下的许可] Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
+        log.debug("Service[查询组织下的许可] Correlation id: {}", UserContextHolder.getContext().getCorrelationId());
 
-            // 随机睡眠
-            // randomlyRunLong();
+        // 随机睡眠
+        // randomlyRunLong();
 
-            List<License> licenses = licenseRepository.findByOrganizationId(organizationId);
+        List<License> licenses = licenseRepository.findByOrganizationId(organizationId);
 
-            if (licenses != null && !licenses.isEmpty()) {
-                Object org = retrieveOrgInfo(organizationId, clientType);
-                for (License license : licenses) {
-                    license.setOrganization(org);
-                }
+        if (licenses != null && !licenses.isEmpty()) {
+            Object org = retrieveOrgInfo(organizationId, clientType);
+            for (License license : licenses) {
+                license.setOrganization(org);
             }
-            return licenses;
-        } finally {
-            log.debug("删除 Hystrix 线程本地变量...");
-            UserContextHolder.remove();
         }
+        return licenses;
     }
 
     /**

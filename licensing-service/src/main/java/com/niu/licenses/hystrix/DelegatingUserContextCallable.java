@@ -3,6 +3,7 @@ package com.niu.licenses.hystrix;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.niu.licenses.utils.UserContext;
 import com.niu.licenses.utils.UserContextHolder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.Callable;
 
@@ -13,6 +14,7 @@ import java.util.concurrent.Callable;
  * @version 1.0 [2021/03/07 13:40]
  * @createTime [2021/03/07 13:40]
  */
+@Slf4j
 public class DelegatingUserContextCallable<V> implements Callable<V> {
 
     private final Callable<V> delegate;
@@ -38,6 +40,8 @@ public class DelegatingUserContextCallable<V> implements Callable<V> {
             return delegate.call();
         } finally {
             this.originalUserContext = null;
+            log.info("删除 hystrix 线程本地变量");
+            UserContextHolder.remove();
         }
     }
 
